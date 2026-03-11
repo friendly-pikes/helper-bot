@@ -16,11 +16,15 @@ class unbanish(commands.Cog):
     @commands.guild_only()
     @commands.hybrid_command(name="unbanish", description="Unbanish a user!")
     async def unbanish(self, ctx: Context, user: discord.Member = None):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("It's normal to lose interest in life.. snowy has lost *ALL* interest in life...")
+            return
+
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")
             return
         
-        if not SemiFunc.is_staff(ctx, ctx.author):
+        if not SemiFunc.can_use_command(ctx, ctx.author, "staff"):
             await ctx.reply("That command is staff only.")
             return
         
@@ -29,7 +33,7 @@ class unbanish(commands.Cog):
         if user == None:
             await ctx.reply("Banish usage: ?banish @user OR use the app / slash command")
         else:
-            if SemiFunc.is_staff(ctx, user):
+            if SemiFunc.can_use_command(ctx, user, "staff"):
                 await ctx.reply(f"Staff cannot be banished, banned, muted or kicked.")
                 return
             if user.bot:

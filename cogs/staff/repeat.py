@@ -16,11 +16,15 @@ class repeat(commands.Cog):
     @commands.guild_only()
     @commands.hybrid_command(name="repeat", description="Send a message to whatever channel!")
     async def repeat(self, ctx: Context, channel: discord.TextChannel, message: str):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("It's normal to lose interest in life.. snowy has lost *ALL* interest in life...")
+            return
+
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")
             return
         
-        if not SemiFunc.is_staff(ctx, ctx.author):
+        if not SemiFunc.can_use_command(ctx, ctx.author, "staff"):
             await ctx.reply("That command is staff only.")
             return
 
@@ -29,6 +33,8 @@ class repeat(commands.Cog):
         if ctx.channel.id == SemiFunc.get_channel_id(ctx, "staff_commands"):
             await channel.send(message)
             await ctx.reply("Sent message successfully!", ephemeral=True)
+        else:
+            await ctx.message.delete()
 
 async def setup(bot):
     await bot.add_cog(repeat(bot))

@@ -15,6 +15,10 @@ class gaydar(commands.Cog):
     @commands.guild_only()
     @commands.hybrid_command(name="gaydar", description="See how gay someone is!")
     async def gaydar(self, ctx: Context, user: discord.Member):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("It's normal to lose interest in life.. snowy has lost *ALL* interest in life...")
+            return
+
         if user:
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")

@@ -10,7 +10,11 @@ class serverinfo(commands.Cog):
 
     @commands.guild_only()
     @commands.hybrid_command(name="serverinfo", description="Server stats")
-    async def eightball(self, ctx: Context):
+    async def serverinfo(self, ctx: Context):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("It's normal to lose interest in life.. snowy has lost *ALL* interest in life...")
+            return
+
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")
             return

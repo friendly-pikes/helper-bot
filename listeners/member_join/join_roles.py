@@ -11,7 +11,8 @@ class OnMemberJoin(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
-        join_roles = files.get_config_entry("join_roles")[main_or_test(member.guild.id)]
+        server_cfg = files._server_cfg()
+        join_roles = server_cfg['join_roles'][main_or_test(member.guild.id)]
 
         # Join Roles
         for rolea in join_roles:

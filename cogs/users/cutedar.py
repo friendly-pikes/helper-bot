@@ -13,6 +13,10 @@ class cutedar(commands.Cog):
     @commands.guild_only()
     @commands.hybrid_command(name="cutedar", description="See how cute someone is!")
     async def cutedar(self, ctx: Context, user: discord.Member):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("It's normal to lose interest in life.. snowy has lost *ALL* interest in life...")
+            return
+
         if user:
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")

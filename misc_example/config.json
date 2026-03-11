@@ -1,0 +1,16 @@
+{
+    "prefix": "?",
+    "server_name": "Friendly Pikes",
+    "bot_name": "Friendly Pikes Helper",
+    
+    "owners": [
+        888072934114074624,
+        1262124659814695005,
+        1267324371660177469
+    ],
+    
+    "output_on_command_used_enabled":  true,
+    "log_audits_enabled":              false,
+    "join_message_enabled":            true,
+    "leave_message_enabled":           true
+}

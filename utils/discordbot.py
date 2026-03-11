@@ -1,4 +1,6 @@
 import os
+import json
+import random
 import discord
 import datetime
 import logging
@@ -34,17 +36,27 @@ class Bot(AutoShardedBot):
         # self.get_all_emojis() = self.emojis
         
     # def create_embed_notitle(self, title:str = "Embed Title", description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed(), fields: [] = []):
-    def create_embed_notitle(self, description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed(), fields: [] = []):
+    def create_embed_notitle(self, description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed(), fields: [] = [], use_by_snow2code_footer: bool = False):
         embed = discord.Embed(description=description, color=color)
         
-        for field in fields:
-            embed.add_field(name=field['name'], value=field['value'], inline=field['inline'])
+        if len(fields) > 0:
+            for field in fields:
+                embed.add_field(name=field['name'], value=field['value'], inline=field['inline'])
+
+        if use_by_snow2code_footer:
+            embed.set_footer(text="Bot developed by snow2code")
 
         return embed
     
-    def create_embed(self, title:str = "Embed Title", description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed()):
-        embed = discord.Embed(description=description, color=color)
-        embed.set_footer(text="Bot developed by snow2code")
+    def create_embed(self, title:str = "Embed Title", description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed(), fields: [] = [], use_by_snow2code_footer: bool = False):
+        embed = discord.Embed(title=title, description=description, color=color)
+        
+        if len(fields) > 0:
+            for field in fields:
+                embed.add_field(name=field['name'], value=field['value'], inline=field['inline'])
+
+        if use_by_snow2code_footer:
+            embed.set_footer(text="Bot developed by snow2code")
         
         return embed
 
@@ -96,10 +108,20 @@ class Bot(AutoShardedBot):
         
         if "topic" in msg.content:
             if msg.content == "&topic":
-                await ctx.send(f"{files.get_random_topic()}?")
+                topics = None
+                topic = ""
+                commands = files.get_filepath("commands", "json")
+
+                with open(commands, "r", encoding="utf8") as file:
+                    data = json.load(file)
+                    topics = data['topics']
+                
+
+                topic = random.choice(topics)
+
+                await ctx.send(f"{topic}?")
         else:
             await self.invoke(ctx)
-
 
 # class HelpFormat(DefaultHelpCommand):
 #     def get_destination(self, no_pm: bool = False):

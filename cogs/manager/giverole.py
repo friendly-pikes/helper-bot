@@ -16,11 +16,15 @@ class giverole(commands.Cog):
     @commands.guild_only()
     @commands.hybrid_command(name="giverole", description="Give a role to a certain user")
     async def giverole(self, ctx: Context, user: discord.Member = None, role: discord.Role = None):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("It's normal to lose interest in life.. snowy has lost *ALL* interest in life...")
+            return
+
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")
             return
         
-        if not SemiFunc.is_owner(ctx.author):
+        if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
             await ctx.reply("That command is owners only.")
             return
         

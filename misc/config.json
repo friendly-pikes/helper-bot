@@ -4,9 +4,11 @@
     "bot_name": "Friendly Pikes Helper",
     
     "owners": [
-        888072934114074624,
         1262124659814695005,
         1267324371660177469
+    ],
+    "managers": [
+        888072934114074624
     ],
     
     "output_on_command_used_enabled":  true,
@@ -14,102 +16,58 @@
     "join_message_enabled":            true,
     "leave_message_enabled":           true,
 
-    "disabled_commands": [
-        "8ball"
+
+    "_valid_activitys": [
+        "playing",
+        "streaming",
+        "listening",
+        "watching",
+        "custom"
     ],
 
-    "topics": [
-        "Who is your favourite person and/or animal",
-        "What is your favourite item",
-        "What is your favourite TV Show or Movie?",
-        "What is your favourite Video Game / Board Game",
-
-        "What do you think should be added to the bot?"
-    ],
-
-    "join_roles": {
-        "main": {
-            "leadership": 1234567890,
-            "custom-roles": 1234567890,
-            "color-roles": 1234567890,
-            "user-info": 1234567890,
-            "metadata": 1234567890,
-            
-            "member": 1234567890,
-            "bot": 1234567890
-        },
-        "test": {
-            "leadership": 1480091498178678878,
-            "custom-roles": 1480092360204353710,
-            "color-roles": 1480092427913134204,
-            "user-info": 1480092515586539651,
-            "metadata": 1480092518149521582,
-            
-            "member": 1480092516379398175,
-            "bot": 1480092516840771664
-        }
-    },
-
-    "channel_ids": {
-        "main": {
-            "boosts": 1234567890,
-            "welcome": 1234567890,
-            "general-chat": 1234567890,
-            "bot-commands": 1234567890,
-
-            "staff_commands": 1234567890,
-            "audit": 1234567890
-        },
-        "test": {
-            "boosts": 1480088595648876686,
-            "welcome": 1480089345971982407,
-            "general-chat": 1480087424603525354,
-            "bot-commands": 1480089587362693308,
-
-            "staff_commands": 1480090236464664708,
-            "audit": 1480090290466590782
-        }
-    },
-
-    "role_ids": {
-        "main": {
-            "staff": 1234567890,
-
-            
-            "cute": 1234567890,
-            "shortie": 1234567890,
-            "smol": 1234567890,
-            "explode": 1234567890,
-            "tall": 1234567890,
-            "silly": 1234567890,
-            "banished": 1234567890,
-
-            "vanity": 1234567890,
-            "verified": 1234567890
-        },
-        "test": {
-            "staff": 1480092327770062890,
-
-
-            "cute": 1480092507001061567,
-            "shortie": 1480092509555134484,
-            "smol": 1480092511086182491,
-            "explode": 1480092512864567296,
-            "tall": 1480092513468420266,
-            "silly": 1480092514160607284,
-            "banished": 1480092518938054787,
-
-            "vanity": 1480092475627671613,
-            "verified": 1480092517746741248
-        }
-    },
-
-    "emoji_ids": {
-        "main": {
-            "owo": 1479235584127143978
-        },
-        "test": {
-            "owo": 1480095058811424842
-        }
-    }
+    "statuses": [
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."},
+        {"activity": "custom", "message": "You don't deserve me as a bot here, and you don't deserve Snowy here on earth...."}
+    ]
 }

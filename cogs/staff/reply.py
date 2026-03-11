@@ -16,11 +16,15 @@ class reply(commands.Cog):
     @commands.guild_only()
     @commands.hybrid_command(name="reply", description="Send a message to whatever as a reply to a message!")
     async def reply(self, ctx: Context, channel: discord.TextChannel, message_id: str, *, message: str):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("It's normal to lose interest in life.. snowy has lost *ALL* interest in life...")
+            return
+
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")
             return
         
-        if not SemiFunc.is_staff(ctx, ctx.author):
+        if not SemiFunc.can_use_command(ctx, ctx.author, "staff"):
             await ctx.reply("That command is staff only.")
             return
         
@@ -34,6 +38,8 @@ class reply(commands.Cog):
                 await ctx.reply("Sent message successfully!", ephemeral=True)
             else:
                 await ctx.reply(f"Cannot find a message with the id '{message_id}' in {channel.mention}")
+        else:
+            await ctx.message.delete()
 
 async def setup(bot):
     await bot.add_cog(reply(bot))

@@ -1,0 +1,24 @@
+{
+    "disabled": [
+
+    ],
+    "staff": [
+        "ban",
+        "banish",
+        "kick",
+        "mute",
+        "unbanish",
+        "unmute",
+        "updatemute"
+    ],
+    "ignores": {
+        "explode": [],
+        "cutinate": [],
+        "smolinate": [],
+        "tallinate": [],
+        "sillinate": []
+    },
+    "expections": {
+        "afk": []
+    }
+}

@@ -11,5 +11,4 @@ __pycache__/
 _private
 
 # Other
-misc/logs/*.log
-misc/logs/*/*.log
+misc/

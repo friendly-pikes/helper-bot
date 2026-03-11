@@ -1,4 +1,3 @@
-import re
 import json
 import discord
 import random
@@ -7,7 +6,7 @@ import utils.files as files
 from datetime import datetime
 
 from utils.custom.context import Context
-from misc import banished_words_private as banished_words_privateA
+from utils.database import Database
 
 def main_or_test(id: int):
     if id == 1414222707570118656:
@@ -19,14 +18,33 @@ class SemiFunc():
     def __init__(*args, **kargs):
         super().__init__(*args, **kargs)
 
-    def create_embed(title: str = "", description: str = "", color: discord.Color = discord.Color.dark_embed()):
-        return discord.Embed(
-            title=title,
-            description=description,
-            color=color
-        )
+    banished_ids = None
+    banished_words_bypasses = None
+    banished_flagmsg = None
+    banished_words_noignore = None
+    banished_words = None
+
+    afk_users = None
     
-    
+    snowy_wants_to_die = True
+
+    def update_banished(logger):
+        data = Database.get_banished()
+
+        SemiFunc.banished_ids = data['ids']
+        SemiFunc.banished_words_bypasses = data['bypasses']
+        SemiFunc.banished_flagmsg = data['flagmsg']
+        SemiFunc.banished_words_noignore = data['noignore']
+        SemiFunc.banished_words = data['words']
+        
+        logger.info("Updating banished lists.")
+
+    def update_afk(logger):
+        data = Database.get_afks()
+
+        SemiFunc.afk_users = data['users']
+        
+        logger.info("Updating AFK Users.")
 
     def get_channel_id(ctx, channelname: str):
         channelids = files.get_channel_ids(ctx.guild.id)
@@ -42,26 +60,41 @@ class SemiFunc():
         
         return None
 
-    def is_owner(user: discord.Member):
+    def can_use_command(ctx: Context, user: discord.Member, type: str):
+        type = type.lower()
         config = files._config()
-        if user.id in config['owners']:
-            return True
-        return False
-
-    def is_staff(ctx: Context, user: discord.Member):
-        role = SemiFunc.get_role_id(ctx, "staff")
-
-        if user.get_role(role):
-            return True
+        # ignore_channels = []
         
-        return False
-    
-    def is_staff__author(ctx: Context):
-        role = SemiFunc.get_role_id(ctx, "staff")
+        # try:
+        #     ignore_channels = files.get_command_channel_ignores(ctx, type, ctx.command.name)
+        # except Exception as e:
+        #     ignore_channels = []
+            
+        #     if str(e) != "'Message' object has no attribute 'command'":
+        #         print(f"error: {e}")
 
-        if ctx.author.get_role(role):
-            return True
+        # Before we do checks. we check if the channel is a ignore channel.
+        # if ctx.channel.id in ignore_channels:
+        #     return False
         
+        if type == "owner":
+            if user.id in config['owners']:
+                return True
+            return False
+        elif type == "manager":
+            if user.id in config['owners']:
+                return True
+            if user.id in config['managers']:
+                return True
+            return False
+        elif type == "staff":
+            role = SemiFunc.get_role_id(ctx, "staff")
+
+            if user.get_role(role):
+                return True
+            return False
+        elif type == "user":
+            return True
         return False
 
     def is_command_exception(user: discord.User, cat: str):
@@ -78,7 +111,7 @@ class SemiFunc():
 
 
     async def moderate_user(bot, ctx: Context, user: discord.Member, moderation_type: str, args: []):
-        moderation_embed = bot.create_embed()
+        moderation_embed = bot.create_embed_notitle()
         isGud = False
 
         
@@ -201,7 +234,7 @@ class SemiFunc():
     async def pikesRadar(bot, user: discord.Member, radar: str):
         forced_ignore = files._radar_ignore_force()
         percent = random.randint(1, 100)
-        embed = SemiFunc.create_embed(color=discord.Color.pink())
+        embed = bot.create_embed(color=discord.Color.pink())
 
         emoji = "🎀"
         if radar == "gay":
@@ -260,7 +293,12 @@ class SemiFunc():
         return embed
     
     def command_disabled(ctx: Context):
-        disabled = files._config()['disabled_commands']
+        commands = files.get_filepath("commands", "json")
+        disabled = None
+
+        with open(commands, "r", encoding="utf8") as file:
+            data = json.load(file)
+            disabled = data['disabled']
 
         if ctx.interaction == None:
             if ctx.command.name in disabled:
