@@ -1,7 +1,25 @@
 {
     "disabled": [
-
+        "eightball",
+        "8ball"
     ],
+    "topics": [
+        "Who is your favourite person and/or animal",
+        "What is your favourite item",
+        "What is your favourite TV Show or Movie?",
+        "What is your favourite Video Game / Board Game",
+
+        "What do you think should be added to the bot?"
+    ],
+    "ignore_channels": {
+        "main": [
+            
+        ],
+        "test": [
+
+        ]
+    },
+    
     "staff": [
         "ban",
         "banish",
@@ -13,12 +31,18 @@
     ],
     "ignores": {
         "explode": [],
-        "cutinate": [],
+        "cutinate": [
+            665263662361214986
+        ],
         "smolinate": [],
         "tallinate": [],
         "sillinate": []
     },
     "expections": {
-        "afk": []
+        "afk": [
+            1403877222959419423,
+            1094359688541372457,
+            1450968328821670040
+        ]
     }
 }

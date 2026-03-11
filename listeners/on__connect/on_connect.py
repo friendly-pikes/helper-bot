@@ -4,7 +4,7 @@ from discord.ext import commands
 from utils.discordbot import Bot
 from utils.semifunc import SemiFunc
 
-class On_Connect(commands.Cog):
+class OnConnect(commands.Cog):
     def __init__(self, bot):
         self.bot: Bot = bot
 
@@ -19,4 +19,4 @@ class On_Connect(commands.Cog):
             self.bot.logger.error(msg=f"Error: {e}")
 
 async def setup(bot):
-    await bot.add_cog(On_Connect(bot))
+    await bot.add_cog(OnConnect(bot))

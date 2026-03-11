@@ -25,8 +25,8 @@ class OnMessageDelete(commands.Cog):
             if message.author.bot == False:
                 shouldLog = True
                 
-                banished = files._banished()['banished_words']
-                banished_words_noignore = files._banished()['banished_words_noignore']
+                banished = SemiFunc.banished_words
+                banished_words_noignore = SemiFunc.banished_words_noignore
                 banished_words_private = banished_words_privateA.private_banished()
                 msg_content_lower = message.content.lower()
                 content_lower_final = re.sub(r'[(#@-_\\/^,.)]', '', msg_content_lower).replace(" ", "")

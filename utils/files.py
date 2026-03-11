@@ -24,6 +24,10 @@ def open_file_rawpath(path):
 
     return file
 
+def get_datafilepath(filename):
+    filepath = os.path.abspath(f"data/{filename}.db")
+    return filepath
+
 def get_filepath(filename, fileext):
     filepath = os.path.abspath(f"misc/{filename}.{fileext}")
     return filepath
@@ -41,20 +45,18 @@ def _banished():
 def _radar_ignore_force():
     return open_file("misc", "radar_forced_ignore", "json")
 
+def _server_cfg():
+    return open_file("misc", "server_cfg", "json")
+
 
 def get_staff_commands():
     commands = open_file("misc", "commands", "json")
     return commands['staff']
 
-def get_random_topic():
-    topics = get_config_entry("topics")
-    rand = random.choice(topics)
-    
-    return rand
 
 def get_emoji_ids(guild_id):
     main_test = main_or_test(guild_id)
-    return _config()['emoji_ids'][main_test]
+    return _server_cfg()['emoji_ids'][main_test]
 
 def get_afk():
     afk = open_file("misc", "afk", "json")
@@ -63,17 +65,27 @@ def get_afk():
 def get_server_name():
     return _config()['server_name']
 
+def get_command_channel_ignores(ctx: Context, type: str, command: str):
+    commands = open_file("misc", "commands", "json")
+    main_test = main_or_test(ctx.guild.id)
+    
+    if commands['ignore_channels'][main_test][type] != None:
+        if commands['ignore_channels'][main_test][type][command]:
+            return commands['ignore_channels'][main_test][type][command]
+        
+    return []
+
 def get_command_ignores():
     commands = open_file("misc", "commands", "json")
     return commands['ignores']
 
 def get_channel_ids(guild_id: int):
     main_test = main_or_test(guild_id)
-    return _config()['channel_ids'][main_test]
+    return _server_cfg()['channel_ids'][main_test]
 
 def get_role_ids(ctx: Context):
     main_test = main_or_test(ctx.guild.id)
-    return _config()['role_ids'][main_test]
+    return _server_cfg()['role_ids'][main_test]
 
 
 def get_channel_id(guild_id: int, name: str):

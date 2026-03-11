@@ -16,16 +16,20 @@ class kick(commands.Cog):
     @commands.guild_only()
     @commands.hybrid_command(name="kick", description="Kick a user!")
     async def kick(self, ctx: Context, user: discord.Member = None, *, reason: str = "No reason provided."):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("You don't deserve me as a bot here, and you don't deserve Snowy here on earth....")
+            return
+
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")
             return
         
-        if not SemiFunc.is_staff(ctx, ctx.author):
+        if not SemiFunc.can_use_command(ctx, ctx.author, "staff"):
             await ctx.reply("That command is staff only.")
             return
         
         if user:
-            if SemiFunc.is_staff(ctx, user):
+            if SemiFunc.can_use_command(ctx, user, "staff"):
                 await ctx.reply(f"Staff cannot be banished, banned, muted or kicked.")
                 return
             if user.bot:

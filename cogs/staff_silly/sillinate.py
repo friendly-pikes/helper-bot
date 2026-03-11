@@ -12,11 +12,15 @@ class sillinate(commands.Cog):
     @commands.guild_only()
     @commands.hybrid_command(name="sillinate", description="Send someone to the sillinator!")
     async def sillinate(self, ctx: Context, user: discord.Member):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("You don't deserve me as a bot here, and you don't deserve Snowy here on earth....")
+            return
+
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")
             return
         
-        if not SemiFunc.is_staff(ctx, ctx.author):
+        if not SemiFunc.can_use_command(ctx, ctx.author, "staff"):
             await ctx.reply("That command is staff only.")
             return
         

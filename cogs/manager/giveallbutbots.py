@@ -9,23 +9,27 @@ from utils.custom.context import Context
 from utils.discordbot import Bot
 from utils.semifunc import SemiFunc
 
-class giveallroles(commands.Cog):
+class giveallbutbots(commands.Cog):
     def __init__(self, bot):
         self.bot: Bot = bot
 
     @commands.guild_only()
-    @commands.hybrid_command(name="giveallbots", description="Give all bots a role")
-    async def giveallbots(self, ctx: Context, role: discord.Role = None):
+    @commands.hybrid_command(name="giveallbutbots", description="Give all users a role")
+    async def giveallbutbots(self, ctx: Context, role: discord.Role = None):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("You don't deserve me as a bot here, and you don't deserve Snowy here on earth....")
+            return
+
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")
             return
         
-        if not SemiFunc.is_owner(ctx.author):
+        if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
             await ctx.reply("That command is owners only.")
             return
         
         if role:
-            await ctx.reply(f"Giving every bot the `{role.name}` role.. this may take a while.", ephemeral=True)
+            await ctx.reply(f"Giving everyone the `{role.name}` role.. this may take a while.", ephemeral=True)
 
             for user in ctx.guild.members:
                 if user.bot:
@@ -34,11 +38,11 @@ class giveallroles(commands.Cog):
 
             # Follow up
             if ctx.interaction:
-                await ctx.interaction.followup.send(f"Gave every bot the `{role.name}` role!", ephemeral=True)
+                await ctx.interaction.followup.send(f"Gave everyone the `{role.name}` role!", ephemeral=True)
             else:
-                await ctx.reply(f"Gave every bot the `{role.name}` role!", ephemeral=True)
+                await ctx.reply(f"Gave everyone the `{role.name}` role!", ephemeral=True)
         else:
-            await ctx.reply("Usage: ?giveallbots @role")
+            await ctx.reply("Usage: ?giveall @role")
 
 async def setup(bot):
-    await bot.add_cog(giveallroles(bot))
+    await bot.add_cog(giveallbutbots(bot))

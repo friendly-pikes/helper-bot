@@ -15,6 +15,10 @@ class bidar(commands.Cog):
     @commands.guild_only()
     @commands.hybrid_command(name="bidar", description="See how bi someone is!")
     async def bidar(self, ctx: Context, user: discord.Member):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("You don't deserve me as a bot here, and you don't deserve Snowy here on earth....")
+            return
+
         if user:
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")

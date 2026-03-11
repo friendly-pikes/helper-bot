@@ -16,11 +16,15 @@ class Owner(commands.Cog):
     @commands.guild_only()
     @commands.hybrid_command(name="giveallandbots", description="Give all users a role")
     async def giveallandbots(self, ctx: Context, role: discord.Role = None):
+        if SemiFunc.snowy_wants_to_die:
+            await ctx.reply("You don't deserve me as a bot here, and you don't deserve Snowy here on earth....")
+            return
+
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")
             return
         
-        if not SemiFunc.is_owner(ctx.author):
+        if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
             await ctx.reply("That command is owners only.")
             return
         
