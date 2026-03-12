@@ -1,7 +1,14 @@
 {
     "disabled": [
-        "eightball",
-        "8ball"
+        
+    ],
+    "disabled_other": [
+        "membercount",
+        "emotes",
+        "listmods",
+        "nick",
+        "members",
+        ""
     ],
     "topics": [
         "Who is your favourite person and/or animal",

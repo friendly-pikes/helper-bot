@@ -10,12 +10,13 @@ class VerifyReaction(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: RawReactionActionEvent):
-        verify_channel_id = await self.bot.fetch_channel(payload.channel_id)
         if payload.member.bot == False:
-            if payload.channel_id == verify_channel_id:
-                # self.bot.get_channel(payload.channel_id)
-                msg = await self.bot.get_channel(payload.channel_id).fetch_message(payload.message_id)
-                print(msg)
+            ## Stupid raw thing, so we gotta.. yea
+            if payload.channel_id == SemiFunc.get_channel_id(payload.member, "verify"):
+                if payload.emoji.name == "✅":
+                    id = SemiFunc.get_role_id(payload.member, "verified")
+                    verified = payload.member.guild.get_role(id)
+                    await payload.member.add_roles(verified)
         
 
 async def setup(bot):

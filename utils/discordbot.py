@@ -21,7 +21,7 @@ class Bot(AutoShardedBot):
         logger.setLevel(logging.INFO)
 
         handler = logging.handlers.RotatingFileHandler(
-            filename=f"./misc/logs/{datetime.datetime.now().strftime('%d-%m-%Y %H-%M')}.log",
+            filename=f"./logs/{datetime.datetime.now().strftime('%d-%m-%Y %H-%M')}.log",
             encoding='utf-8',
             maxBytes=32 * 1024 * 1024,  # 32 MiB
             backupCount=5,  # Rotate through 5 files
@@ -92,14 +92,21 @@ class Bot(AutoShardedBot):
                 gud = False
 
             if gud:
-                for file in os.listdir(f"cogs/{who}"):
-                    # Ignore files that aren't .py files
-                    if not file.endswith(".py"):
-                        continue
-                    
-                    commands = commands + 1
-                    name = file[:-3]
-                    await self.load_extension(f"cogs.{who}.{name}")
+                for sub in os.listdir(f"cogs/{who}"):
+                    if sub != "__pycache__":
+                        if sub.endswith(".py"):
+                            commands = commands + 1
+                            name = sub[:-3]
+                            await self.load_extension(f"cogs.{who}.{name}")
+                        else:
+                            for file in os.listdir(f"cogs/{who}/{sub}"):
+                                # Ignore files that aren't .py files
+                                if not file.endswith(".py"):
+                                    continue
+                                
+                                commands = commands + 1
+                                name = file[:-3]
+                                await self.load_extension(f"cogs.{who}.{sub}.{name}")
         
         print(f"Loaded {commands} command files.\nLoaded {listeners} listener files.")
     

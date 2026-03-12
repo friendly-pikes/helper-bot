@@ -12,3 +12,7 @@ _private
 
 # Other
 misc/
+logs/*.*
+
+assets/join_messages_images/*.*
+assets/profile_pictures/*.*

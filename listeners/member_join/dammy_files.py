@@ -11,7 +11,7 @@ class DammyFiles(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
-        banished_ids = files._banished()['banished_ids']
+        banished_ids = SemiFunc.banished_ids
 
         if member.id in banished_ids:
             role = member.guild.get_role( SemiFunc.get_role_id(member, "banished") )

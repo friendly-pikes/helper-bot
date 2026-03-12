@@ -21,7 +21,9 @@ class OnMemberJoin(commands.Cog):
             cantAddReason = None
             if rolea == "bot":
                 if member.bot == True:
-                    canAdd = True
+                    role = member.guild.get_role(join_roles[rolea])
+                    await member.add_roles(role, reason="Join Roles")
+                    canAdd = False
                 else:
                     cantAddReason = "User is not a bot"
                     canAdd = False

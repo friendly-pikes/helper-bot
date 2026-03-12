@@ -108,6 +108,21 @@ class SemiFunc():
                 return True
         return False
 
+    async def member_number(guild: discord.Guild, member: discord.Member):
+        # members = [m for m in guild.members if m.joined_at]
+        # members.sort(key=lambda m: m.joined_at)
+
+        # for i, m in enumerate(members, start=1):
+        #     if m.id == member.id:
+        #         return i
+        
+        # Better(?) - Let's be faster though..
+        sorted_members = sorted(
+            [m for m in guild.members if m.joined_at],
+            key=lambda m: m.joined_at
+        )
+
+        return sorted_members.index(member) + 1
 
 
     async def moderate_user(bot, ctx: Context, user: discord.Member, moderation_type: str, args: []):
@@ -322,7 +337,7 @@ class SemiFunc():
                 bot.logger.info(msg=f"{interaction.user.name}: {content}")
                 if interaction.command.name in files.get_staff_commands():
                     audit = ctx.guild.get_channel(SemiFunc.get_channel_id(ctx, "audit"))
-                    moderation_embed = bot.create_embed()
+                    moderation_embed = bot.create_embed_notitle()
 
                     moderation_embed.description = f"Used `{interaction.command.name}` command in <#{ctx.channel.id}>"
                     moderation_embed.description = f"{moderation_embed.description}\n{content}"

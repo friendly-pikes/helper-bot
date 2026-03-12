@@ -25,7 +25,7 @@ class BanishMessage(commands.Cog):
 
         msg_content_lower = msg.content.lower()
         content_lower_final = re.sub(r'[(#@-_\\/^,.)]', '', msg_content_lower).replace(" ", "")
-        canBanish = True
+        canBanish = "Yes, banish it"
         
         if msg.author.bot == False:
 
@@ -41,18 +41,35 @@ class BanishMessage(commands.Cog):
                 if len(msg.mentions) > 0:
                     for mention in msg.mentions:
                         if str(mention.id).find("67") >= 0:
-                            canBanish = False
+                            canBanish = "No, Don't banish it"
                             # self.bot.logger.info(msg=f"Don't banish '{msg_content_lower}' sent by {msg.author.name}")
                 
+                # 12/03/2026
+                # Emojis can hve 67 in it..
+                # same with channel ids
+                if msg_content_lower.find("<:") >= 0:
+                    canBanish = "Maybe banish it?"
+
+                if msg_content_lower.find("<#") >= 0:
+                    canBanish = "Maybe banish it?"
+
                 # 2 - If in counting and the message has 67 in it, ignore
                 if msg.channel.id == 1419042219842736299 and msg_content_lower.find("67") >= 0:
                     self.bot.logger.info(msg="We need them to count ffs!")
-                    canBanish = False
+                    canBanish = "No, Don't banish it"
 
 
-                if canBanish:
+                if canBanish in ["Yes, banish it", "Maybe banish it?"]:
                     for banished_thing in banished:
                         shouldBanish = True
+
+                        # 12/03/2026
+                        # Emojis can have 67 in it...
+                        # same with channel ids
+                        if banished_thing == "67" and msg_content_lower.find("<:") >= 0:
+                            shouldBanish = False
+                        if banished_thing == "67" and msg_content_lower.find("<#") >= 0:
+                            shouldBanish = False
 
                         # 3 - If banished_thing in banished_ignore, do not banish
                         for ignore in banished_ignore:
