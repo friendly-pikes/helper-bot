@@ -12,6 +12,13 @@ class OnCommandError(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx: Context, error: commands.CommandError):
+        # 13/03/2026 - Send certain messages depending on the error.
+        if isinstance(error, commands.NoPrivateMessage):
+            await ctx.reply("The commands are only usable in a server!")
+        elif isinstance(error, commands.BadArgument):
+            await ctx.reply("You're missing a argument for that command.")
+
+
         if not os.path.exists("logs/errors"):
             os.makedirs("logs/errors")
         if not os.path.exists("logs/errors/commands"):

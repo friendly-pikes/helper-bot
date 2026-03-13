@@ -69,6 +69,12 @@
 ## Bot Issues
 Report issues [here](https://github.com/friendly-pikes/friendly-pikes-bot/issues) (issues tab)
 
+## Todo and Otheer
+I just got a trello board for organizing what ideas n suggestions I have, planned features, stuff todo, what I am working on and what I've done. <br>
+This was very recent, not when I first worked on the bot. March 13th, 2026. <br><br>
+
+Anyway, the trello board can be found [here](https://trello.com/b/dClNyq03/friendly-pikes-helper).
+
 
 ## Notes
 This bot is coded and maintained by [snowy](https://github.com/snow2code)
