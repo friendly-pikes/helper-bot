@@ -12,7 +12,6 @@ import utils.files as files
 from discord import app_commands
 from discord.ext.commands import AutoShardedBot, DefaultHelpCommand
 
-
 class Bot(AutoShardedBot):
     def __init__(self, prefix: str = "!", *args, **kargs):
         super().__init__(*args, **kargs)
