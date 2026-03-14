@@ -23,7 +23,7 @@ async def status_loop(bot):
     await bot.wait_until_ready()
 
     while not bot.is_closed():
-        await asyncio.sleep(360)
+        await asyncio.sleep(960)
         await change_status(bot)
         # 360 - 6 minutes
         # 240 - 4 minutes
