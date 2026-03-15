@@ -1,7 +1,10 @@
 import os
 import json
+import psutil
 import random
+import asyncio
 import discord
+import platform
 import datetime
 import logging
 import logging.handlers
@@ -11,6 +14,15 @@ from utils.custom.context import Context
 import utils.files as files
 from discord import app_commands
 from discord.ext.commands import AutoShardedBot, DefaultHelpCommand
+
+def get_size(bytes, suffix="B"):
+    factor = 1024
+    # byte- 1024
+    # gibibyte - 10
+    for unit in ["", "K", "M", "G", "T"]:
+        if bytes < factor:
+            return f"{bytes:.2f}{unit}{suffix}"
+        bytes /= factor
 
 class Bot(AutoShardedBot):
     def __init__(self, prefix: str = "!", *args, **kargs):
@@ -32,7 +44,68 @@ class Bot(AutoShardedBot):
         logger.addHandler(handler)
 
         self.logger = logger
+        self.shutting_down = False
         # self.get_all_emojis() = self.emojis
+    
+    async def close(self):
+        print("im dying")
+
+        self.shutting_down = True
+
+        await asyncio.sleep(1)
+        test_server = self.get_guild(1480087423433052242)
+        status_channel = test_server.get_channel(1482618083263643698)
+
+        last_message = await status_channel.fetch_message(1482633940039630869)
+        
+        if last_message != None:
+            uname = platform.uname()
+            svmem = psutil.virtual_memory()
+            node_name = uname.node
+
+            bot_drive = None
+            bot_drive_usage = None
+            for i, part in enumerate(psutil.disk_partitions()):
+                if part.mountpoint.startswith("D"):
+                    bot_drive = part
+                    bot_drive_usage = psutil.disk_usage(part.mountpoint)
+
+            embed = self.create_embed(
+                f"🖥️ {node_name} | STATUS",
+                description="Updates every minute.\n\n",
+                color=discord.Color.red(),
+                fields=[
+                    {
+                        "name": "🔴 Status",
+                        "value": "Offline",
+                        "inline": True
+                    },
+                    {
+                        "name": "📊 Current Metrics",
+                        "value": f"• CPU: {psutil.cpu_percent()}%\n• Memory: {get_size(svmem.used)} / {get_size(svmem.available)} ({svmem.percent}%)",
+                        "inline": False
+                    },
+                    {
+                        "name": "Extra",
+                        "value": f"• SSD: {get_size(bot_drive_usage.used)} / {get_size(bot_drive_usage.total)} ({bot_drive_usage.percent}%)",
+                        "inline": False
+                    }
+                ]
+            )
+
+            embed.set_footer(text=f"Last updated: {datetime.datetime.now().strftime('%d/%m/%Y, %H:%M')}")
+            embed.timestamp = datetime.datetime.utcnow()
+
+            await last_message.edit(
+                embed=embed
+            )
+            embed.set_footer(text=f"Last updated: {datetime.datetime.now().strftime('%d/%m/%Y, %H:%M')}")
+            embed.timestamp = datetime.datetime.utcnow()
+
+            await last_message.edit(content="",embed=embed)
+        print("XwX")
+
+        await super().close()
         
     # def create_embed_notitle(self, title:str = "Embed Title", description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed(), fields: [] = []):
     def create_embed_notitle(self, description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed(), fields: [] = [], use_by_snow2code_footer: bool = False):

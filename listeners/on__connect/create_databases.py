@@ -3,7 +3,8 @@ from utils.discordbot import Bot
 from utils.database import Database
 from utils.semifunc import SemiFunc
 
-class CreadyDatabases(commands.Cog):
+## 15/03/2026 - FUCK ME.. Did I really still "Create" as "Cready"??? WAS I DRUNK!?-
+class CreateDatabases(commands.Cog):
     def __init__(self, bot):
         self.bot: Bot = bot
 
@@ -20,4 +21,4 @@ class CreadyDatabases(commands.Cog):
         SemiFunc.update_afk(self.bot.logger)
 
 async def setup(bot):
-    await bot.add_cog(CreadyDatabases(bot))
+    await bot.add_cog(CreateDatabases(bot))

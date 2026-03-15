@@ -12,6 +12,59 @@ class CogStuff(commands.Cog):
     def __init__(self, bot):
         self.bot: Bot = bot
 
+    ## events
+    @commands.guild_only()
+    @commands.hybrid_command(name="reloadlistener", description="And now I'll wave, so long! -- Placeholder")
+    async def reloadlistener(self, ctx: Context, what: str, sub: str, name: str):
+        if SemiFunc.command_disabled(ctx):
+            await ctx.reply("That command is currently disabled.")
+            return
+        
+        if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
+            await ctx.reply("That command is owners only.")
+            return
+        
+        try:
+            await self.bot.reload_extension(f"listener.{what}.{sub}.{name}")
+            await ctx.reply(f"Reloaded `listener.{what}.{sub}.{name}`")
+        except Exception as e:
+            await ctx.reply(f"`{e}`")
+
+    @commands.guild_only()
+    @commands.hybrid_command(name="loadlistener", description="And now I'll wave, so long! -- Placeholder")
+    async def loadlistener(self, ctx: Context, what: str, sub: str, name: str):
+        if SemiFunc.command_disabled(ctx):
+            await ctx.reply("That command is currently disabled.")
+            return
+        
+        if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
+            await ctx.reply("That command is owners only.")
+            return
+        
+        try:
+            await self.bot.load_extension(f"listener.{what}.{sub}.{name}")
+            await ctx.reply(f"Loaded `listener.{what}.{sub}.{name}`")
+        except Exception as e:
+            await ctx.reply(f"`{e}`")
+
+    @commands.guild_only()
+    @commands.hybrid_command(name="unloadlistener", description="And now I'll wave, so long! -- Placeholder")
+    async def unloadlistener(self, ctx: Context, what: str, sub: str, name: str):
+        if SemiFunc.command_disabled(ctx):
+            await ctx.reply("That command is currently disabled.")
+            return
+        
+        if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
+            await ctx.reply("That command is owners only.")
+            return
+        
+        try:
+            await self.bot.unload_extension(f"listener.{what}.{sub}.{name}")
+            await ctx.reply(f"Unloaded `listener.{what}.{sub}.{name}`")
+        except Exception as e:
+            await ctx.reply(f"`{e}`")
+
+    ## Commands
     @commands.guild_only()
     @commands.hybrid_command(name="reload", description="And now I'll wave, so long! -- Placeholder")
     async def reload(self, ctx: Context, what: str, sub: str, name: str):
