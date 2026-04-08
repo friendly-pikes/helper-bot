@@ -1,16 +1,24 @@
 import os
 import asyncio
 import sqlite3
-import discord
 
-from datetime import datetime
-from utils.discordbot import Bot
-
-databases = [
-    "afk",
-    "banished",
-    "userdata"
-]
+databases = {
+    "banished": [
+        {"table_name": "banished_ids", "data": "user_id INT"},
+        {"table_name": "banished_words_bypasses", "data": "bypass TEXT"},
+        {"table_name": "banished_flagmsg", "data": "word TEXT"},
+        {"table_name": "banished_words_noignore", "data": "word TEXT, message TEXT"},
+        {"table_name": "banished_words", "data": "word TEXT, message TEXT"},
+    ],
+    # "other_stuff": [
+    #     {"table_name": "jobs", "data": "id INTEGER, job TEXT, wage REAL"}
+    # ],
+    "user_data": [
+        {"table_name": "afk_users", "data": "user_id INT, name TEXT, message TEXT, since TEXT, toggle INT"},
+        {"table_name": "cooldowns", "data": "user_id INT, since TEXT"},
+        {"table_name": "user_data", "data": "used INT, user_id INT, alise TEXT, job TEXT, tokens INT, wallet INT, bank INT"}
+    ]
+}
 
 class Database():
     def __init__(cls, *args, **kargs):
@@ -22,43 +30,64 @@ class Database():
         if not os.path.exists(f"data"):
             os.mkdir("data")
         
-        # User Data
-        if not os.path.exists(f"data/user_data.db"):
-            usr_conn = sqlite3.connect(f"data/user_data.db")
+        for database in databases:
+            # Exists? Check if all tables exist.
+            if os.path.exists(f"data/{database}.db"):
+                conn = sqlite3.connect(f"data/{database}.db")
+                cursor = conn.cursor()
 
-            usr_conn.execute(f"CREATE TABLE afk_users (user_id INT, name TEXT, message TEXT, since TEXT)")
-            usr_conn.execute(f"CREATE TABLE cooldown (user_id INT, since TEXT)")
-            usr_conn.execute(f"CREATE TABLE user_data (user_id INT, alise TEXT, job TEXT, tokens INT, wallet INT, bank INT)")
+                for table in databases[database]:
+                    cursor.execute(f"SELECT count(name) FROM sqlite_master WHERE type='table' AND name='{table['table_name']}'")
+                    
+                    if cursor.fetchone()[0] < 1:
+                        conn.execute(f"CREATE TABLE {table['table_name']} ({table['data']})")
 
-            usr_conn.close()
+                conn.close()
+            else:
+                conn = sqlite3.connect(f"data/{database}.db")
 
-        # Banished
-        if not os.path.exists(f"data/banished.db"):
-            ban_conn = sqlite3.connect(f"data/banished.db")
-            ban_cursor = ban_conn.cursor()
-
-            ban_cursor.execute(f"CREATE TABLE banished_ids (user_id INT)")
-            ban_cursor.execute(f"CREATE TABLE banished_words_bypasses (bypass TEXT)")
-            ban_cursor.execute(f"CREATE TABLE banished_flagmsg (word TEXT)")
-            ban_cursor.execute(f"CREATE TABLE banished_words_noignore (word TEXT, message TEXT)")
-            ban_cursor.execute(f"CREATE TABLE banished_words (word TEXT, message TEXT)")
-
-            ban_conn.close()
-
-        cls.banished_conn = sqlite3.connect(f"data/banished.db", timeout=30)
-        cls.userdata_conn = sqlite3.connect(f"data/user_data.db", timeout=30)
+                for table in databases[database]:
+                    conn.execute(f"CREATE TABLE {table['table_name']} ({table['data']})")
+                    ## 21/03/2026 - kmskmskmskms
+                    # if table["table_name"] == "jobs":
+                    #     conn.execute(f'CREATE TABLE {table['table_name']} ({table['data']}) (PRIMARY KEY("id" AUTOINCREMENT))')
+                    # else:
+                    #     conn.execute(f"CREATE TABLE {table['table_name']} ({table['data']})")
+                
+                conn.close()
+        
+        cls.banished_conn = sqlite3.connect(f"data/banished.db", timeout=30, check_same_thread=False)
+        cls.jobs_conn = sqlite3.connect(f"data/jobs.db", timeout=30, check_same_thread=False)
+        cls.userdata_conn = sqlite3.connect(f"data/user_data.db", timeout=30, check_same_thread=False)
         
         cls.banished_conn.execute("PRAGMA journal_mode=WAL;")
+        cls.jobs_conn.execute("PRAGMA journal_mode=WAL;")
         cls.userdata_conn.execute("PRAGMA journal_mode=WAL;")
-
-
+        
     banished_conn = None
+    jobs_conn = None
     userdata_conn = None
 
     write_lock = asyncio.Lock()
 
-    def create_databases(logger):
-        print("Removed(?)")
+    def get_jobs():
+        cursor = Database.jobs_conn.cursor()
+
+        cursor.execute("SELECT * FROM jobs ORDER BY job ASC")
+        jobs_raw = cursor.fetchall()
+
+        result = {
+            "jobs": []
+        }
+
+        for job in jobs_raw:
+            result["jobs"].append({
+                "job": job[1],
+                "wage": job[2]
+            })
+            
+        return result
+
 
     def get_afks():
         cursor = Database.userdata_conn.cursor()

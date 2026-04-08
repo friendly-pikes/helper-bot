@@ -1,4 +1,3 @@
-import sqlite3
 import discord
 
 from utils.econ import Economy
@@ -34,12 +33,6 @@ class Econ__Balance(commands.Cog):
             # await ctx.message.delete()
             return
         
-        # No cooldown for balance!!
-        # if Economy.econ__is_on_cooldown(ctx.author, self.bot.logger):
-        #     await ctx.reply(f"You are on cooldown! Please try again tomorrow.")
-        #     return
-        # else:
-        #     Economy.econ__put_on_cooldown(ctx, ctx.author, self.bot.logger)
         user_real: discord.Member = ctx.author
         if user != None:
             user_real = user
@@ -59,11 +52,11 @@ class Econ__Balance(commands.Cog):
             have_text = user_real.name
 
         if len(user_data) > 0:
-            balance = user_data[3]
+            balance = user_data[4]
             embed:discord.Embed = Economy.econ_embed(
-                    user=user_real,
-                    title="Balance",
-                    description=f"{have_text} {Economy.format_amount(round(balance, 2))} {Economy.get_curreny_name()}"
+                user=user_real,
+                title="Balance",
+                description=f"{have_text} {Economy.format_amount(round(balance, 2))} {Economy.get_curreny_name()}"
             )
 
             await ctx.reply(embed=embed)

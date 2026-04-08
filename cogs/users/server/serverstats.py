@@ -4,7 +4,7 @@ from utils.custom.context import Context
 from utils.discordbot import Bot
 from utils.semifunc import SemiFunc
 
-class serverinfo(commands.Cog):
+class UserCommands__server__Serverinfo(commands.Cog):
     def __init__(self, bot):
         self.bot: Bot = bot
 
@@ -78,4 +78,4 @@ class serverinfo(commands.Cog):
         await ctx.reply(embed=embed)
 
 async def setup(bot):
-    await bot.add_cog(serverinfo(bot))
+    await bot.add_cog(UserCommands__server__Serverinfo(bot))

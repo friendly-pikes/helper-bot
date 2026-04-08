@@ -1,19 +1,6 @@
 {
     "disabled": [
-        "balance",
-        "bal",
-        "blackjack",
-        "coin",
-        "cups",
-        "cooldowntest",
-        "give",
-        "add_money",
-        "remove_money",
-
-        "work",
-        "quit",
-        "apply",
-        "jobs"
+        
     ],
     "disabled_other": [
         "membercount",
@@ -76,6 +63,9 @@
         "sillinate": []
     },
     "expections": {
+        "inator": [
+            1403877222959419423
+        ],
         "reload": [
             1403877222959419423
         ],

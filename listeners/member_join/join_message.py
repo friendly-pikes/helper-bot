@@ -3,7 +3,6 @@ import discord
 
 from discord.ext import commands
 from utils.discordbot import Bot
-from utils.files import files
 from utils.semifunc import SemiFunc
 
 class JoinMessage(commands.Cog):

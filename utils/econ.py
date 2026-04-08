@@ -30,6 +30,12 @@ class Economy():
         amount = round(amount, 2)
         return f'{amount:,}'
 
+    def use_econ(ctx: Context, user: discord.Member, logger: Logger):
+        conn = Database.userdata_conn.cursor()
+
+        conn.execute(f'UPDATE user_data SET used=? WHERE user_id=?', (1, ctx.author.id))
+
+
     def econ__is_on_cooldown(ctx: Context, user: discord.Member, logger: Logger):
         cooldowns = Database.userdata_conn.cursor().execute("SELECT * FROM cooldowns")
         usr_cooldown = None

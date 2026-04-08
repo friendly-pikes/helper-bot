@@ -17,6 +17,9 @@ class CreateDatabases(commands.Cog):
 
         # Update the AFK users list
         SemiFunc.update_afk(self.bot.logger)
+
+        # Update the job list
+        SemiFunc.update_jobs(self.bot.logger)
         
 
 

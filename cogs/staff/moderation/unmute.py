@@ -1,9 +1,6 @@
-import re
 import discord
-import asyncio
 
-import utils.files as files
-from datetime import datetime, timedelta
+from datetime import timedelta
 from discord.ext import commands
 from utils.custom.context import Context
 from utils.discordbot import Bot

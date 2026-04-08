@@ -1,8 +1,7 @@
 import os
 import discord
+import importlib
 
-import utils.files as files
-from datetime import datetime, timedelta
 from discord.ext import commands
 from utils.custom.context import Context
 from utils.discordbot import Bot
@@ -12,7 +11,255 @@ class CogStuff(commands.Cog):
     def __init__(self, bot):
         self.bot: Bot = bot
 
+    @commands.guild_only()
+    @commands.hybrid_command(name="reloadutil")
+    async def reloadutil(self, ctx: Context, name: str):
+        """
+        And now I'll wave, so long! -- Placeholder
+
+        Parameters
+        ----------
+        ctx: Context
+            The context of the command invokation
+        name: str
+            The file name of the module (e.g semifunc)
+        """
+        if SemiFunc.command_disabled(ctx):
+            await ctx.reply("That command is currently disabled.")
+            return
+        
+        if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
+            if SemiFunc.is_command_exception(ctx.author, "reload"):
+                pass
+            else:
+                await ctx.reply("That command is only usable by owners and manager.")
+                return
+        
+        name_maker = f"utils/{name}.py"
+
+        try:
+            module_name = importlib.import_module(f"utils.{name}")
+            await ctx.reply(f"Reloaded util module `{name}`")
+        except ModuleNotFoundError:
+            return await ctx.send(f"Couldn't find module named `{name_maker}`")
+        except Exception as e:
+            await ctx.reply(f"`{e}`")
+
+    @commands.guild_only()
+    @commands.hybrid_command(name="reloadutils")
+    async def reloadutils(self, ctx: Context):
+        """
+        And now I'll wave, so long! -- Placeholder
+
+        Parameters
+        ----------
+        ctx: Context
+            The context of the command invokation
+        """
+        if SemiFunc.command_disabled(ctx):
+            await ctx.reply("That command is currently disabled.")
+            return
+        
+        if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
+            if SemiFunc.is_command_exception(ctx.author, "reload"):
+                pass
+            else:
+                await ctx.reply("That command is only usable by owners and manager.")
+                return
+            
+        success = []
+        failed = []
+            
+        for what in os.listdir("utils"):
+            if what.endswith(".py"):
+                name_maker = f"utils/{what}"
+                try:
+                    module_name = importlib.import_module(f"utils.{what[:-3]}")
+                    success.append(f"utils.{what[:-3]}")
+                # except ModuleNotFoundError:
+                #     failed.append(f"utils.{what} - Couldn't find module named `{name_maker}`")
+                except Exception as e:
+                    failed.append(f"utils.{what} - {e}")
+
+        successA = ""
+        failedA = ""
+
+        for a in success:
+            successA = f"{successA}\n{a}"
+        for a in failed:
+            failedA = f"{failedA}\n{a}"
+        with open("misc/temp/reload_utils_success.txt", "w") as f:
+            f.write(successA)
+        with open("misc/temp/reload_utils_failed.txt", "w") as f:
+            f.write(failedA)
+
+        await ctx.reply(
+            files=[
+                discord.File("misc/temp/reload_utils_success.txt"),
+                discord.File("misc/temp/reload_utils_failed.txt")
+            ]
+        )
+        os.remove("misc/temp/reload_utils_success.txt")
+        os.remove("misc/temp/reload_utils_failed.txt")
+
+
     ## events
+
+    @commands.guild_only()
+    @commands.hybrid_command(name="unloadlisteners")
+    async def unloadlisteners(self, ctx: Context):
+        """
+        And now I'll wave, so long! -- Placeholder
+
+        Parameters
+        ----------
+        ctx: Context
+            The context of the command invokation
+        """
+        if SemiFunc.command_disabled(ctx):
+            await ctx.reply("That command is currently disabled.")
+            return
+        
+        if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
+            if SemiFunc.is_command_exception(ctx.author, "reload"):
+                pass
+            else:
+                await ctx.reply("That command is only usable by owners and manager.")
+                return
+
+        success = []
+        failed = []
+        
+        listeners = 0
+        for what in os.listdir("listeners"):
+            gud = True
+            if what == "__pycache__":
+                gud = False
+            else:
+                if what.endswith(".py"):
+                    gud = False
+                    listeners = listeners + 1
+                    name = what[:-3]
+                    try:
+                        await self.bot.unload_extension(f"listeners.{name}")
+                        success.append(f"listeners.{name}")
+                    except Exception as e:
+                        failed.append(f"listeners.{name} - {e}")
+
+            if gud:
+                for file in os.listdir(f"listeners/{what}"):
+                    # Ignore files that aren't .py files
+                    if not file.endswith(".py"):
+                        continue
+
+                    listeners = listeners + 1
+                    name = file[:-3]
+                    try:
+                        await self.bot.unload_extension(f"listeners.{what}.{name}")
+                        success.append(f"listeners.{what}.{name}")
+                    except Exception as e:
+                        failed.append(f"listeners.{what}.{name} - {e}")
+         
+        successA = ""
+        failedA = ""
+
+        for a in success:
+            successA = f"{successA}\n{a}"
+        for a in failed:
+            failedA = f"{failedA}\n{a}"
+        with open("misc/temp/reload_all_success.txt", "w") as f:
+            f.write(successA)
+        with open("misc/temp/reload_all_failed.txt", "w") as f:
+            f.write(failedA)
+
+        await ctx.send(files=[discord.File("misc/temp/reload_all_success.txt"), discord.File("misc/temp/reload_all_failed.txt")])
+        os.remove("misc/temp/reload_all_success.txt")
+        os.remove("misc/temp/reload_all_failed.txt")
+            
+        try:
+            await self.bot.unload_extension(f"listeners.{what}.{name}")
+            await ctx.reply(f"Unloaded `listeners.{what}.{name}`")
+        except Exception as e:
+            await ctx.reply(f"`{e}`")
+
+    @commands.guild_only()
+    @commands.hybrid_command(name="loadlisteners")
+    async def loadlisteners(self, ctx: Context):
+        """
+        And now I'll wave, so long! -- Placeholder
+
+        Parameters
+        ----------
+        ctx: Context
+            The context of the command invokation
+        """
+        if SemiFunc.command_disabled(ctx):
+            await ctx.reply("That command is currently disabled.")
+            return
+        
+        if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
+            if SemiFunc.is_command_exception(ctx.author, "reload"):
+                pass
+            else:
+                await ctx.reply("That command is only usable by owners and manager.")
+                return
+
+        success = []
+        failed = []
+        
+        listeners = 0
+        for what in os.listdir("listeners"):
+            gud = True
+            if what == "__pycache__":
+                gud = False
+            else:
+                if what.endswith(".py"):
+                    gud = False
+                    listeners = listeners + 1
+                    name = what[:-3]
+                    try:
+                        await self.bot.load_extension(f"listeners.{name}")
+                        success.append(f"listeners.{name}")
+                    except Exception as e:
+                        failed.append(f"listeners.{name} - {e}")
+
+            if gud:
+                for file in os.listdir(f"listeners/{what}"):
+                    # Ignore files that aren't .py files
+                    if not file.endswith(".py"):
+                        continue
+
+                    listeners = listeners + 1
+                    name = file[:-3]
+                    try:
+                        await self.bot.load_extension(f"listeners.{what}.{name}")
+                        success.append(f"listeners.{what}.{name}")
+                    except Exception as e:
+                        failed.append(f"listeners.{what}.{name} - {e}")
+         
+        successA = ""
+        failedA = ""
+
+        for a in success:
+            successA = f"{successA}\n{a}"
+        for a in failed:
+            failedA = f"{failedA}\n{a}"
+        with open("misc/temp/reload_all_success.txt", "w") as f:
+            f.write(successA)
+        with open("misc/temp/reload_all_failed.txt", "w") as f:
+            f.write(failedA)
+
+        await ctx.send(files=[discord.File("misc/temp/reload_all_success.txt"), discord.File("misc/temp/reload_all_failed.txt")])
+        os.remove("misc/temp/reload_all_success.txt")
+        os.remove("misc/temp/reload_all_failed.txt")
+            
+        try:
+            await self.bot.unload_extension(f"listeners.{what}.{name}")
+            await ctx.reply(f"Unloaded `listeners.{what}.{name}`")
+        except Exception as e:
+            await ctx.reply(f"`{e}`")
+
+
     @commands.guild_only()
     @commands.hybrid_command(name="reloadlistener")
     async def reloadlistener(self, ctx: Context, what: str, name: str):
@@ -313,8 +560,7 @@ class CogStuff(commands.Cog):
         with open("misc/temp/reload_all_failed.txt", "w") as f:
             f.write(failedA)
 
-        await ctx.send(file=discord.File("misc/temp/reload_all_success.txt"))
-        await ctx.send(file=discord.File("misc/temp/reload_all_failed.txt"))
+        await ctx.send(files=[discord.File("misc/temp/reload_all_success.txt"), discord.File("misc/temp/reload_all_failed.txt")])
         os.remove("misc/temp/reload_all_success.txt")
         os.remove("misc/temp/reload_all_failed.txt")
             

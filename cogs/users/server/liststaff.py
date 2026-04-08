@@ -1,12 +1,10 @@
-import discord
-import random
 
 from discord.ext import commands
 from utils.custom.context import Context
 from utils.discordbot import Bot
 from utils.semifunc import SemiFunc
 
-class liststaff(commands.Cog):
+class UserCommands__server__Liststaff(commands.Cog):
     def __init__(self, bot):
         self.bot: Bot = bot
 
@@ -21,6 +19,15 @@ class liststaff(commands.Cog):
         ctx: Context
             The context of the command invocation
         """
+        if SemiFunc.command_disabled(ctx):
+            await ctx.reply("That command is currently disabled.")
+            return
+        
+        if ctx.channel.id != SemiFunc.get_channel_id(ctx, 'bot-commands'):
+            # Use in bot commands you goober
+            await ctx.reply("Use that command in <#1477493580061741156>")
+            return
+
         administrator_id = SemiFunc.get_role_id(ctx, "administrator")
         event_manager_id = SemiFunc.get_role_id(ctx, "event_manager")
         moderator_id = SemiFunc.get_role_id(ctx, "moderator")
@@ -57,24 +64,5 @@ class liststaff(commands.Cog):
             
         await ctx.reply(embed=self.bot.create_embed(title="Server Staff", description=message))
 
-    # @commands.guild_only()
-    # @commands.hybrid_command(name="gaydar", description="See how gay someone is!")
-    # async def gaydar(self, ctx: Context, user: discord.Member):
-    #     if user:
-    #         if user.bot:
-    #             await ctx.reply("Not able to use radar commads on bots.")
-    #             return
-            
-    #         if SemiFunc.command_disabled(ctx):
-    #             await ctx.reply("That command is currently disabled.")
-    #             return
-            
-    #         await SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction, ctx)
-        
-    #         embed = await SemiFunc.pikesRadar(self, user, "gay")
-    #         await ctx.reply(embed=embed)
-    #     else:
-    #         await ctx.reply("Can't use radar commands on noone!")
-
 async def setup(bot):
-    await bot.add_cog(liststaff(bot))
+    await bot.add_cog(UserCommands__server__Liststaff(bot))

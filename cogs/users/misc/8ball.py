@@ -6,7 +6,7 @@ from utils.custom.context import Context
 from utils.discordbot import Bot
 from utils.semifunc import SemiFunc
 
-class eightball(commands.Cog):
+class UserCommands__Misc__EightBall(commands.Cog):
     def __init__(self, bot):
         self.bot: Bot = bot
 
@@ -37,4 +37,4 @@ class eightball(commands.Cog):
         await ctx.reply(embed=embed)
 
 async def setup(bot):
-    await bot.add_cog(eightball(bot))
+    await bot.add_cog(UserCommands__Misc__EightBall(bot))

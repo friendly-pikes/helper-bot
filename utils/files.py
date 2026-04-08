@@ -35,6 +35,18 @@ def get_filepath(filename, fileext):
 def get_config_entry(entry: str):
     return _config()[entry]
 
+def get_bot_config_entry(entry: str):
+    return _bot_config()[entry]
+
+def get_users_config_entry(entry: str):
+    return _users()[entry]
+
+
+def _users():
+    return open_file("misc", "users", "json")
+
+def _bot_config():
+    return open_file("misc", "bot", "json")
 
 def _config():
     return open_file("misc", "config", "json")
@@ -61,9 +73,6 @@ def get_emoji_ids(guild_id):
 def get_afk():
     afk = open_file("misc", "afk", "json")
     return afk['users']
-
-def get_server_name():
-    return _config()['server_name']
 
 def get_command_channel_ignores(ctx: Context, type: str, command: str):
     commands = open_file("misc", "commands", "json")

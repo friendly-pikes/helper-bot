@@ -1,14 +1,9 @@
-import os
 import re
-import json
-import random
 import discord
 
-from datetime import datetime
 from discord.ext import commands
 from misc import banished_words_private as banished_words_privateA
 from utils.discordbot import Bot
-from utils.files import files
 from utils.semifunc import SemiFunc
 
 class BanishMessage(commands.Cog):
@@ -26,10 +21,17 @@ class BanishMessage(commands.Cog):
             banished_words_private = banished_words_privateA.private_banished()
 
             msg_content_lower = msg.content.lower()
-            content_lower_final = re.sub(r'[(#@-_\\/^,.)]', '', msg_content_lower).replace(" ", "")
+            content_lower_final = re.sub(r'[(#@-_\\/^,.)]', '', msg_content_lower)
+            # content_lower_final = re.sub(r'[(#@-_\\/^,.)]', '', msg_content_lower).replace(" ", "")
             canBanish = "Yes, banish it"
             
             if msg.author.bot == False:
+                shouldBanish = True
+
+                for ignore in banished_ignore:
+                    if content_lower_final.find(ignore) >= 0:
+                        # self.bot.logger.info(msg=f"Don't banish '{msg_content_lower}' sent by {msg.author.name}")
+                        shouldBanish = False
 
                 for thing in banished_nodelete:
                     if content_lower_final.find(thing) >= 0:
@@ -63,8 +65,6 @@ class BanishMessage(commands.Cog):
 
                     if canBanish in ["Yes, banish it", "Maybe banish it?"]:
                         for banished_thing in banished:
-                            shouldBanish = True
-
                             # 12/03/2026
                             # Emojis can have 67 in it...
                             # same with channel ids
@@ -74,10 +74,6 @@ class BanishMessage(commands.Cog):
                                 shouldBanish = False
 
                             # 3 - If banished_thing in banished_ignore, do not banish
-                            for ignore in banished_ignore:
-                                if content_lower_final.find(ignore) >= 0:
-                                    # self.bot.logger.info(msg=f"Don't banish '{msg_content_lower}' sent by {msg.author.name}")
-                                    shouldBanish = False
                                 
                             if shouldBanish:
                                 if msg_content_lower.find(banished_thing) >= 0:
@@ -92,13 +88,13 @@ class BanishMessage(commands.Cog):
                             await SemiFunc.moderate_user(self.bot, msg, msg.author, "message_banished", [banished_words_private[banished_thing], banished_thing])
                             await msg.delete()
                 
-                
-                # These are banished for ALL, even staff.
-                for banished_thing in banished_words_noignore:
-                    if content_lower_final.find(banished_thing) >= 0:
-                        # await msg.reply(banished_words_noignore[banished_thing])
-                        await SemiFunc.moderate_user(self.bot, msg, msg.author, "message_banished", [banished_words_noignore[banished_thing], banished_thing])
-                        await msg.delete()
+                if shouldBanish:
+                    # These are banished for ALL, even staff.
+                    for banished_thing in banished_words_noignore:
+                        if content_lower_final.find(banished_thing) >= 0:
+                            # await msg.reply(banished_words_noignore[banished_thing])
+                            await SemiFunc.moderate_user(self.bot, msg, msg.author, "message_banished", [banished_words_noignore[banished_thing], banished_thing])
+                            await msg.delete()
                     
 
                     

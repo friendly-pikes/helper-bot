@@ -1,10 +1,9 @@
 import os
-import discord
+
 from datetime import datetime
 from discord.ext import commands
 from utils.discordbot import Bot
 from utils.custom.context import Context
-from utils.semifunc import SemiFunc
 
 class OnCommandError(commands.Cog):
     def __init__(self, bot):

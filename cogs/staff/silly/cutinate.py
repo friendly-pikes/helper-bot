@@ -27,11 +27,13 @@ class cutinate(commands.Cog):
             return
         
         if not SemiFunc.can_use_command(ctx, ctx.author, "staff"):
-            await ctx.reply("That command is staff only.")
-            return
+            if SemiFunc.is_command_exception(ctx.author, "inator"):
+                pass
+            else:
+                await ctx.reply("That command is staff only.")
+                return
         
         await SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction, ctx)
-
         await SemiFunc.pikesInator(self, ctx, user, "cute", "give")
 
 async def setup(bot):

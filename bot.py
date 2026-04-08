@@ -3,7 +3,10 @@ import random
 import dotenv
 import asyncio
 import discord
+import threading
+import web.app as app
 
+from web.app import run as run_web
 from datetime import datetime
 
 good_to_go = True
@@ -32,12 +35,20 @@ if good_to_go == True:
         command_prefix=config['prefix'],
         prefix=config['prefix'], command_attrs=dict(hidden=True),
         allowed_mentions=discord.AllowedMentions(
-            everyone=False, roles=False, users=True
+            everyone=False, roles=True, users=True
         ),
-        intents=discord.Intents.all()
+        intents=discord.Intents.all(),
+        help_command = None,
+        case_insensitive=True
     )
-    try:
 
+    app.bot_instance = bot
+    
+    t = threading.Thread(target=run_web)
+    t.daemon = True
+    t.start()
+
+    try:
         bot.run(token)
 
     except Exception as e:
