@@ -37,10 +37,11 @@ class Econ__Work(commands.Cog):
         if Economy.econ__is_on_cooldown(ctx, ctx.author, self.bot.logger):
             await ctx.reply(f"You are on cooldown! Please try again tomorrow.")
             return
-        else:
-            Economy.econ__put_on_cooldown(ctx, ctx.author, self.bot.logger)
+        ## Not fair.. we should do cooldown if they actually can work.
+        # else:
+        Economy.use_econ(ctx, ctx.author, self.bot.logger)
 
-        jobs_conn = sqlite3.connect(f"data/jobs.db")
+        jobs_conn = Database.jobs_conn
         cursor = jobs_conn.cursor()
         jobs = []
 
@@ -49,12 +50,12 @@ class Econ__Work(commands.Cog):
 
         user = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
         if len(user) > 0:
-            job = user[2]
+            job = user[3]
             for job_ in jobs:
                 if job_[0] == job:
                     job = job_
 
-            if user[2] == "NULL":
+            if user[3] == "NULL":
                 await ctx.reply("You can't work if you don't have a job.")
             else:
                 issues = []
@@ -63,11 +64,12 @@ class Econ__Work(commands.Cog):
                     issues.append("You can work a maximum of 9 hours.")
                     
                 wage = job[1] * hours
-                bal = user[3]
+                bal = user[4]
 
                 Database.userdata_conn.cursor().execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (bal + wage, ctx.author.id))
                 Database.userdata_conn.commit()
                 await ctx.reply(f"You went work for {job[0]} for {hours} hours, and earned {wage} {Economy.get_curreny_name()}!")
+                Economy.econ__put_on_cooldown(ctx, ctx.author, self.bot.logger)
 
                 if len(issues) > 0:
                     for issue in issues:
@@ -95,7 +97,7 @@ class Econ__Work(commands.Cog):
             # await ctx.message.delete()
             return
         
-        jobs_conn = sqlite3.connect(f"data/jobs.db")
+        jobs_conn = Database.jobs_conn
         cursor = jobs_conn.cursor()
         jobs = []
 
@@ -105,7 +107,7 @@ class Econ__Work(commands.Cog):
         user = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
         if len(user) > 0:
             # Make sure they have a job
-            if user[2] in jobs:
+            if user[3] in jobs:
                 Database.userdata_conn.cursor().execute(f'UPDATE user_data SET job=? WHERE user_id=?', ("NULL", ctx.author.id))
                 Database.userdata_conn.commit()
 
@@ -140,7 +142,7 @@ class Econ__Work(commands.Cog):
             return
         
 
-        jobs_conn = sqlite3.connect(f"data/jobs.db")
+        jobs_conn = Database.jobs_conn
         cursor = jobs_conn.cursor()
         jobs = []
 
@@ -157,7 +159,7 @@ class Econ__Work(commands.Cog):
             #    AND NOONE TAKES AWAY MY FOXES!!!!!
 
             # Make sure they don't already have a job
-            if user[2]== None or user[2] == "NULL":
+            if user[3] == None or user[3] == "NULL":
 
                 # It should be a actual job we registered in the database.
                 is_job = False
@@ -200,8 +202,8 @@ class Econ__Work(commands.Cog):
             # await ctx.message.delete()
             return
         
-        embed:discord.Embed = Economy.econ_embed()
-        jobs_conn = sqlite3.connect(f"data/jobs.db")
+        embed:discord.Embed = Economy.econ_embed(title="")
+        jobs_conn = Database.jobs_conn
         cursor = jobs_conn.cursor()
 
         cursor.execute("SELECT * FROM jobs")
@@ -213,7 +215,7 @@ class Econ__Work(commands.Cog):
         for job in jobs_data:
             fields.append({
                 "name": job[1],
-                "value": f"$/£{job[2]} an hour",
+                "value": f"£{job[2]} an hour",
                 "inline": True
             })
         

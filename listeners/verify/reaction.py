@@ -1,7 +1,6 @@
 from discord import *
 from discord.ext import commands
 from utils.discordbot import Bot
-from utils.custom.context import Context
 from utils.semifunc import SemiFunc
 
 class VerifyReaction(commands.Cog):

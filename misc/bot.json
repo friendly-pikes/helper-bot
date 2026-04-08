@@ -1,0 +1,53 @@
+{
+    "_INFO": "This file holds info / configs for the bot, such as status message IDs and other.",
+    
+    "statuses": [
+        {"activity": "custom", "message": "Watching general chat for sillies and rule breakers"},
+        {"activity": "custom", "message": "I'm hungy. Pls give me ram :3"},
+        {"activity": "custom", "message": "\"I'm so done with being a little possessed\""},
+        {"activity": "custom", "message": "\"So sing along! It's such a silly song!\""},
+        {"activity": "custom", "message": "\"Here comes the sun, dododo. Here comes the sun and I say..\""},
+        {"activity": "custom", "message": "\"I forgot that you exist!\" ¯\\_(ツ)_/¯"},
+        {"activity": "custom", "message": "\"It could be tomorrow, it could be todayy\""},
+        {"activity": "custom", "message": "\"I hope I said I love you enough~\""},
+        {"activity": "custom", "message": "\"I think they see me as infamous\""},
+        {"activity": "custom", "message": "\"Oh, I wish I could relate\""},
+        {"activity": "custom", "message": "And now I'll wave \"so long\""},
+        {"activity": "custom", "message": "\"Rip and tear.. until it is done.\""},
+        {"activity": "custom", "message": "\"The only thing they fear is you.\""},
+        {"activity": "custom", "message": "\"Time for farewell.\""},
+        {"activity": "custom", "message": "Toccata and Fugue in D minor but metal is my favorite song"},
+        {"activity": "custom", "message": "\"Can you run Doom?\" ..don't try me, of course I can play doom! Doom can be played on anything!"},
+        {"activity": "custom", "message": "\"I forgot that you corrupted!\" Â¯\\_(ãƒ„)_/Â¯"}
+    ],
+    "random_messages": [
+        "Beep",
+        "Beep boop",
+        "Boop",
+        "Blep",
+        "Mlem",
+        "What to do, what to do.. try and steal the ram on top of the fridge it is!"
+    ],
+    "_UNUSED INFO": "These random messages didn't make the cut.",
+    "random_messages_unused": [
+        "Beep beep",
+        "Beep boop",
+        "Bleep bloop",
+        "Beep-bop-boop",
+        "Blarp-a-barp",
+        "Beep",
+        "Robot noises"
+    ],
+
+
+    "_ IDS": "Below are IDs for whatever. a bot id for example, and a message id for example.",
+    "main_bot_id": 1477564008772014142,
+    "test_bot_id": 1482861019582693507,
+
+    "main_server_id": 1414222707570118656,
+    "test_server_id": 1480087423433052242,
+
+    "_STATUS MESSAGE": "This is for a status message in my test server.. says if the bot is offline or online.",
+    "main_status_id": 1482633940039630869,
+    "test_status_id": 1483989253045358602
+}

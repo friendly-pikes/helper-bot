@@ -1,10 +1,8 @@
 import os
 import json
-# import psutil
 import random
 import asyncio
 import discord
-# import platform
 import datetime
 import logging
 import logging.handlers
@@ -12,17 +10,7 @@ import logging.handlers
 from utils.custom.context import Context
 # from utils import permissions
 import utils.files as files
-from discord import app_commands
 from discord.ext.commands import AutoShardedBot, DefaultHelpCommand
-
-def get_size(bytes, suffix="B"):
-    factor = 1024
-    # byte- 1024
-    # gibibyte - 10
-    for unit in ["", "K", "M", "G", "T"]:
-        if bytes < factor:
-            return f"{bytes:.2f}{unit}{suffix}"
-        bytes /= factor
 
 class Bot(AutoShardedBot):
     def __init__(self, prefix: str = "!", *args, **kargs):
@@ -48,71 +36,72 @@ class Bot(AutoShardedBot):
         # self.get_all_emojis() = self.emojis
     
     async def close(self):
-        print("im dying")
+        if self.is_ready() == True:
+            print("im dying")
 
-        self.shutting_down = True
+            self.shutting_down = True
 
-        await asyncio.sleep(0.1)
-        test_server = self.get_guild(1480087423433052242)
-        status_channel = test_server.get_channel(1482618083263643698)
+            await asyncio.sleep(0.1)
+            # test_server = self.get_guild(1480087423433052242)
+            # status_channel = test_server.get_channel(1482618083263643698)
 
-        status_message = await status_channel.fetch_message(1482633940039630869)
-        
-        if self.user.id == 1482861019582693507:
-            status_message = await status_channel.fetch_message(1483989253045358602)
+            # status_message = await status_channel.fetch_message(1482633940039630869)
+            
+            # if self.user.id == 1482861019582693507:
+            #     status_message = await status_channel.fetch_message(1483989253045358602)
 
-        if status_message != None:
-            # uname = platform.uname()
-            # svmem = psutil.virtual_memory()
-            # node_name = uname.node
+            # if status_message != None:
+            #     # uname = platform.uname()
+            #     # svmem = psutil.virtual_memory()
+            #     # node_name = uname.node
 
-            # bot_drive = None
-            # bot_drive_usage = None
-            # for i, part in enumerate(psutil.disk_partitions()):
-            #     if part.mountpoint.startswith("D"):
-            #         bot_drive = part
-            #         bot_drive_usage = psutil.disk_usage(part.mountpoint)
+            #     # bot_drive = None
+            #     # bot_drive_usage = None
+            #     # for i, part in enumerate(psutil.disk_partitions()):
+            #     #     if part.mountpoint.startswith("D"):
+            #     #         bot_drive = part
+            #     #         bot_drive_usage = psutil.disk_usage(part.mountpoint)
 
-            embed = self.create_embed(
-                # 🖥️ {node_name} | STATUS
-                f"🖥️ {self.user.display_name} | STATUS",
-                description="Updates every minute.\n\n",
-                color=discord.Color.red(),
-                fields=[
-                    {
-                        "name": "🔴 Status",
-                        "value": "Offline",
-                        "inline": True
-                    }
-                    # {
-                    #     "name": "📊 Current Metrics",
-                    #     "value": f"• CPU: {psutil.cpu_percent()}%\n• Memory: {get_size(svmem.used)} / {get_size(svmem.available)} ({svmem.percent}%)",
-                    #     "inline": False
-                    # },
-                    # {
-                    #     "name": "Extra",
-                    #     "value": f"• SSD: {get_size(bot_drive_usage.used)} / {get_size(bot_drive_usage.total)} ({bot_drive_usage.percent}%)",
-                    #     "inline": False
-                    # }
-                ]
-            )
+            #     embed = self.create_embed(
+            #         # 🖥️ {node_name} | STATUS
+            #         f"🖥️ {self.user.display_name} | STATUS",
+            #         description="Updates every minute.\n\n",
+            #         color=discord.Color.red(),
+            #         fields=[
+            #             {
+            #                 "name": "🔴 Status",
+            #                 "value": "Offline",
+            #                 "inline": True
+            #             }
+            #             # {
+            #             #     "name": "📊 Current Metrics",
+            #             #     "value": f"• CPU: {psutil.cpu_percent()}%\n• Memory: {get_size(svmem.used)} / {get_size(svmem.available)} ({svmem.percent}%)",
+            #             #     "inline": False
+            #             # },
+            #             # {
+            #             #     "name": "Extra",
+            #             #     "value": f"• SSD: {get_size(bot_drive_usage.used)} / {get_size(bot_drive_usage.total)} ({bot_drive_usage.percent}%)",
+            #             #     "inline": False
+            #             # }
+            #         ]
+            #     )
 
-            embed.set_footer(text=f"Last updated: {datetime.datetime.now().strftime('%d/%m/%Y, %H:%M')}")
-            embed.timestamp = datetime.datetime.utcnow()
+            #     embed.set_footer(text=f"Last updated: {datetime.datetime.now().strftime('%d/%m/%Y, %H:%M')}")
+            #     embed.timestamp = datetime.datetime.utcnow()
 
-            await status_message.edit(
-                embed=embed
-            )
-            embed.set_footer(text=f"Last updated: {datetime.datetime.now().strftime('%d/%m/%Y, %H:%M')}")
-            embed.timestamp = datetime.datetime.utcnow()
+            #     await status_message.edit(
+            #         embed=embed
+            #     )
+            #     embed.set_footer(text=f"Last updated: {datetime.datetime.now().strftime('%d/%m/%Y, %H:%M')}")
+            #     embed.timestamp = datetime.datetime.utcnow()
 
-            await status_message.edit(content="",embed=embed)
-        print("XwX")
+            #     await status_message.edit(content="",embed=embed)
+            print("XwX")
 
-        await super().close()
+            await super().close()
         
     # def create_embed_notitle(self, title:str = "Embed Title", description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed(), fields: [] = []):
-    def create_embed_notitle(self, description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed(), fields: [] = [], use_by_snow2code_footer: bool = False):
+    def create_embed_notitle(self, description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed(), fields: list = [], use_by_snow2code_footer: bool = False):
         embed = discord.Embed(description=description, color=color)
         
         if len(fields) > 0:
@@ -124,7 +113,7 @@ class Bot(AutoShardedBot):
 
         return embed
     
-    def create_embed(self, title:str = "Embed Title", description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed(), fields: [] = [], use_by_snow2code_footer: bool = False):
+    def create_embed(self, title:str = "Embed Title", description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed(), fields: list = [], use_by_snow2code_footer: bool = False):
         embed = discord.Embed(title=title, description=description, color=color)
         
         if len(fields) > 0:
@@ -135,6 +124,7 @@ class Bot(AutoShardedBot):
             embed.set_footer(text="Bot developed by snow2code")
         
         return embed
+
 
     async def setup_hook(self):
         ## Load listener cogs
@@ -189,17 +179,11 @@ class Bot(AutoShardedBot):
     async def process_commands(self, msg: discord.Message):
         ctx = await self.get_context(msg, cls=Context)
         
-        if "topic" in msg.content:
-            if msg.content == "&topic":
-                topics = None
-                topic = ""
-                commands = files.get_filepath("commands", "json")
-
-                with open(commands, "r", encoding="utf8") as file:
-                    data = json.load(file)
-                    topics = data['topics']
+        if msg.content.lower().find("&topic") == 0:
+            with open(files.get_filepath("commands", "json"), "r", encoding="utf8") as file:
+                data = json.load(file)
+                topics = data['topics']
                 
-
                 topic = random.choice(topics)
 
                 await ctx.send(f"{topic}?")

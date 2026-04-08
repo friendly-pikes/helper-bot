@@ -1,12 +1,85 @@
+import os
 import re
 import discord
+import requests
 
+from io import BytesIO
+from PIL import Image, ImageFont, ImageDraw
 from datetime import datetime
 from discord.ext import commands
 from utils.discordbot import Bot
 from utils.semifunc import SemiFunc
 from utils.files import files
 from misc import banished_words_private as banished_words_privateA
+
+file_extensions = [
+    # Paintdotnet
+    "pdn",
+
+    "png",
+
+    # JPEG
+    "jpg",
+    "jpeg",
+    "jpe",
+    "jiff",
+    "exif",
+
+    # JPEG XL
+    "jxl",
+
+    # HEIC
+    "heic",
+    "heif",
+    "hif",
+
+    # WebP
+    "webp",
+    
+    # DirectDraw Surface (DDS)
+    "dds",
+
+    # TIFF
+    "tiff",
+    "tif",
+
+    # GIF
+    "gif",
+    
+    # BMP
+    "bmp",
+    "dib",
+    "rle",
+
+    # TGA
+    "tga",
+
+    # JPEG XR
+    "jxr",
+    "wdp",
+    "wmp",
+
+    # Icon
+    "ico",
+
+    # Photoshop
+    "psd",
+    "psd",
+
+    # SVG
+    "svg",
+    
+    # VTF
+    "vtf"
+]
+
+def strip_fileexts(_filename: str):
+    filename = _filename
+
+    for ext in file_extensions:
+        filename = filename.replace(f".{ext}", "")
+    print(filename)
+    return filename
 
 class OnMessageDelete(commands.Cog):
     def __init__(self, bot):
@@ -52,18 +125,23 @@ class OnMessageDelete(commands.Cog):
                         # if SemiFunc.is_banished_word(message) == False:
                         auditChannelId = files.get_channel_id(message, "audit")
                         auditChannel = self.bot.get_channel(auditChannelId)
+                        embed = self.bot.create_embed_notitle(color=discord.Color.red())
+                        files_msg = []
+                        
+                        if len(message.attachments) > 0:
+                            embed.description = f"**Message sent by {message.author.mention} was deleted in {message.channel.mention}**"
+                            
+                            if not os.path.exists("assets/attachments"):
+                                os.mkdir("assets/attachments")
+                            if not os.path.exists(f"assets/attachments/{message.author.name}"):
+                                os.mkdir(f"assets/attachments/{message.author.name}")
+
+                            for attachment in message.attachments:
+                                await attachment.save(f"assets/attachments/{message.author.name}/{attachment.id}.webp")
+                                files_msg.append(discord.File(f"assets/attachments/{message.author.name}/{attachment.id}.webp"))
                                 
-                        embed = self.bot.create_embed_notitle(
-                            description=f"**Message sent by {message.author.mention} was deleted in {message.channel.mention}**",
-                            color=discord.Color.red(),
-                            fields=[
-                                {
-                                    "name": "message:",
-                                    "value": f"```{message.content}```",
-                                    "inline": False
-                                },
-                            ]
-                        )
+                        if message.content != "":
+                            embed.add_field(name=message,value=f"```{message.content}```",inline=False)
 
                         embed.timestamp = datetime.utcnow()
                         embed.set_author(name=message.author.name, icon_url=message.author.avatar)

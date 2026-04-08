@@ -1,9 +1,6 @@
 import re
 import discord
-import asyncio
 
-import utils.files as files
-from datetime import datetime, timedelta
 from discord.ext import commands
 from utils.custom.context import Context
 from utils.discordbot import Bot
@@ -57,9 +54,10 @@ class banish(commands.Cog):
             if user.get_role(banishId):
                 await ctx.reply(f"Cannot banish {user.mention}, they are already banished.\nUnbanish them with `unbanish`")
             else:
+                await SemiFunc.moderate_user(self.bot, ctx, user, "banish", [reason])
                 await user.remove_roles(verified, reason=f"They've been banished by {ctx.author.name}")
-                await user.add_roles(banished, reason=f"They've been banished by {ctx.author.name}")
-                await ctx.reply(f"{user.mention} has been banished!")
+                await user.add_roles(banished, reason=f"They've been banished by {ctx.author.name} for the reason `{reason}`")
+                await ctx.reply(f"{user.mention} has been banished!\nReason: `{reason}`")
 
 async def setup(bot):
     await bot.add_cog(banish(bot))

@@ -2,7 +2,6 @@ import discord
 
 from discord.ext import commands
 from utils.discordbot import Bot
-from utils.semifunc import SemiFunc
 
 class OnConnect(commands.Cog):
     def __init__(self, bot):

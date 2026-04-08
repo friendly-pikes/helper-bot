@@ -1,5 +1,3 @@
-import discord
-
 from discord.ext import commands
 from discord.errors import *
 from discord.ext.commands.errors import *
@@ -29,8 +27,11 @@ class Nick(commands.Cog):
             return
             
         if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
-            await ctx.reply("That command is staff only.")
-            return
+            if SemiFunc.is_command_exception(ctx.author, "reload"):
+                pass
+            else:
+                await ctx.reply("That command is only usable by owners and managers.")
+                return
         
         await SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction, ctx)
         

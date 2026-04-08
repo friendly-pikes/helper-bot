@@ -1,12 +1,11 @@
 import discord
-import random
 
 from discord.ext import commands
 from utils.custom.context import Context
 from utils.discordbot import Bot
 from utils.semifunc import SemiFunc
 
-class gaydar(commands.Cog):
+class UserCommands__Radar__Gaydar(commands.Cog):
     def __init__(self, bot):
         self.bot: Bot = bot
 
@@ -36,10 +35,10 @@ class gaydar(commands.Cog):
             
             await SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction, ctx)
         
-            embed = await SemiFunc.pikesRadar(self, user, "gay")
+            embed = await SemiFunc.pikesRadar(self.bot, user, "gay")
             await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use radar commands on noone!")
 
 async def setup(bot):
-    await bot.add_cog(gaydar(bot))
+    await bot.add_cog(UserCommands__Radar__Gaydar(bot))

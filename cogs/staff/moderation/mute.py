@@ -1,9 +1,7 @@
 import re
 import discord
-import asyncio
 
-import utils.files as files
-from datetime import datetime, timedelta
+from datetime import timedelta
 from discord.ext import commands
 from utils.custom.context import Context
 from utils.discordbot import Bot
@@ -70,16 +68,6 @@ class Staff(commands.Cog):
             
             await SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction, ctx)
             
-            if duration.lower().endswith("y"):
-                duration.replace("y", "m")
-            elif duration.lower().endswith("years"):
-                duration.replace("years", "m")
-
-            if reason.lower().find("years") >= 0:
-                reason = "No reason provided."
-                duration = parase_duration("10m")
-                
-
             errors = []
 
             if parase_duration(duration) > 2419200:

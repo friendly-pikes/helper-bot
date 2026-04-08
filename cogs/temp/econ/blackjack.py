@@ -1,8 +1,4 @@
-import sqlite3
-import discord
 
-from utils.econ import Economy
-from utils.database import Database
 from discord.ext import commands
 from utils.custom.context import Context
 from utils.discordbot import Bot

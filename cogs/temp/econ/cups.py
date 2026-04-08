@@ -1,6 +1,4 @@
-import enum
 import random
-import sqlite3
 
 from typing import Literal
 from utils.econ import Economy
@@ -39,15 +37,14 @@ class Econ__Cups(commands.Cog):
             return
         
         user = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
-        if bet > user[3] or user[3] == 0:
+        if bet > user[4] or user[4] == 0:
             await ctx.reply(f"You don't have enough to bet.")
             return
+        Economy.use_econ(ctx, ctx.author, self.bot.logger)
         
-        # if Economy.econ__is_on_cooldown(ctx, ctx.author, self.bot.logger):
-        #     await ctx.reply(f"You are on cooldown! Please try again tomorrow.")
-        #     return
-        # else:
-        #     Economy.econ__put_on_cooldown(ctx, ctx.author, self.bot.logger)
+        if Economy.econ__is_on_cooldown(ctx, ctx.author, self.bot.logger):
+            await ctx.reply(f"You are on cooldown! Please try again tomorrow.")
+            return
 
         if bet < 1:
             bet = 1
@@ -62,7 +59,7 @@ class Econ__Cups(commands.Cog):
         if you_won:
             # "Congratulations You Won!"
             if len(user) > 0:
-                bal = user[3]
+                bal = user[4]
                 embed = Economy.econ_embed(
                         user=ctx.author,
                         title=f"Cups",
@@ -88,6 +85,8 @@ class Econ__Cups(commands.Cog):
             )
 
             await ctx.reply(embed=embed)
+
+        Economy.econ__put_on_cooldown(ctx, ctx.author, self.bot.logger)
 
 
 async def setup(bot):

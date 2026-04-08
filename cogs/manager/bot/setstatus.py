@@ -1,9 +1,5 @@
-import re
 import discord
-import asyncio
 
-import utils.files as files
-from datetime import datetime, timedelta
 from discord.ext import commands
 from utils.custom.context import Context
 from utils.discordbot import Bot
@@ -31,8 +27,11 @@ class SetStatus(commands.Cog):
             return
         
         if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
-            await ctx.reply("That command is owners only.")
-            return
+            if SemiFunc.is_command_exception(ctx.author, "reload"):
+                pass
+            else:
+                await ctx.reply("That command is only usable by owners and managers.")
+                return
         
         activity = discord.CustomActivity(name=message)
         

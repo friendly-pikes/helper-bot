@@ -110,8 +110,11 @@ class Banished(commands.Cog):
             return
         
         if not SemiFunc.can_use_command(ctx, ctx.author, "manager"):
-            await ctx.reply("That command is owners only.")
-            return
+            if SemiFunc.is_command_exception(ctx.author, "reload"):
+                pass
+            else:
+                await ctx.reply("That command is only usable by owners and managers.")
+                return
         
         cursor = Database.banished_conn.cursor()
 

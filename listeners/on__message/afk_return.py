@@ -1,4 +1,3 @@
-import sqlite3
 import discord
 
 from utils.database import Database
@@ -22,52 +21,60 @@ class AFKReturn(commands.Cog):
             if not msg.content.startswith("?"):
                 for afk_user in afk_data:
                     if afk_user['user_id'] == msg.author.id:
-                        afk_time = datetime.strptime(afk_user['since'], "%d/%m/%Y %H:%M")
-                        now_time = datetime.now()
-                        afk_dur = now_time - afk_time
+                        toggle = Database.userdata_conn.execute(f"SELECT toggle FROM afk_users WHERE user_id = ?", (msg.author.id,)).fetchone()[0]
                         
-                        seconds = int(afk_dur.total_seconds())
-                        days = seconds // 86400
-                        hours = (seconds & 86400) // 3600
-                        minutes = (seconds % 3600) // 60
-                        # secondsB = seconds & 60
+                        # 23/03/2026 - Pixie (the owner) asked / suggested a afk toggle..
+                        ## Values
+                        # 1 - Don't remove
+                        # 0 - Remove
 
-                        if minutes > 1:
-                            hours_text = "hour"
-                            minutes_text = "minute"
-                            days_text = "day"
-                                    
-                            if minutes > 1 or minutes == 0:
-                                minutes_text = "minutes"
-                            if hours > 1 or hours == 0:
-                                hours_text = "hours"
-                            if days > 1 or days == 0:
-                                days_text = "days"
+                        if toggle != 1:
+                            afk_time = datetime.strptime(afk_user['since'], "%d/%m/%Y %H:%M")
+                            now_time = datetime.now()
+                            afk_dur = now_time - afk_time
                             
-                            ## Remove from database
-                            conn = Database.userdata_conn
-                            conn.execute(f"DELETE FROM afk_users WHERE user_id = {afk_user['user_id']}")
-                            conn.commit()
+                            seconds = int(afk_dur.total_seconds())
+                            days = seconds // 86400
+                            hours = (seconds & 86400) // 3600
+                            minutes = (seconds % 3600) // 60
+                            # secondsB = seconds & 60
 
-                            SemiFunc.update_afk(self.bot.logger)
-
-                            ## Now return message
-                            try:
-                                returnMessage = f"Welcome back {msg.author.mention}, I removed your AFK status."
-
-                                # await msg.channel.send(content=f"Welcome back {msg.author.mention}, I removed your AFK status.", delete_after=5)
-
-                                if minutes > 0 and hours == 0 and days == 0:
-                                    returnMessage = f"{returnMessage}\nYou've been AFK for {minutes} {minutes_text}"
-                                if hours > 0 and days == 0:
-                                    returnMessage = f"{returnMessage}\nYou've been AFK for {hours} {hours_text}, {minutes} {minutes_text}"
-                                if days > 0:
-                                    returnMessage = f"{returnMessage}\nYou've been AFK for {days} {days_text}, {hours} {hours_text}, {minutes} {minutes_text}"
+                            if minutes > 1:
+                                hours_text = "hour"
+                                minutes_text = "minute"
+                                days_text = "day"
+                                        
+                                if minutes > 1 or minutes == 0:
+                                    minutes_text = "minutes"
+                                if hours > 1 or hours == 0:
+                                    hours_text = "hours"
+                                if days > 1 or days == 0:
+                                    days_text = "days"
                                 
-                                await msg.channel.send(content=f"{returnMessage}", delete_after=5)
-                                await msg.author.edit(nick=afk_user['name'], reason="They are back")
-                            except Forbidden as e:
-                                print(f"Cannot change {msg.author.display_name}'s name")
+                                ## Remove from database
+                                conn = Database.userdata_conn
+                                conn.execute(f"DELETE FROM afk_users WHERE user_id = {afk_user['user_id']}")
+                                conn.commit()
+
+                                SemiFunc.update_afk(self.bot.logger)
+
+                                ## Now return message
+                                try:
+                                    returnMessage = f"Welcome back {msg.author.mention}, I removed your AFK status."
+
+                                    # await msg.channel.send(content=f"Welcome back {msg.author.mention}, I removed your AFK status.", delete_after=5)
+
+                                    if minutes > 0 and hours == 0 and days == 0:
+                                        returnMessage = f"{returnMessage}\nYou've been AFK for {minutes} {minutes_text}"
+                                    if hours > 0 and days == 0:
+                                        returnMessage = f"{returnMessage}\nYou've been AFK for {hours} {hours_text}, {minutes} {minutes_text}"
+                                    if days > 0:
+                                        returnMessage = f"{returnMessage}\nYou've been AFK for {days} {days_text}, {hours} {hours_text}, {minutes} {minutes_text}"
+                                    
+                                    await msg.channel.send(content=f"{returnMessage}", delete_after=5)
+                                    await msg.author.edit(nick=afk_user['name'], reason="They are back")
+                                except Forbidden as e:
+                                    print(f"Cannot change {msg.author.display_name}'s name")
                             
 
             # afk = files.get_filepath("afk", "json")

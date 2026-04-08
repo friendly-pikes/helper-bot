@@ -3,7 +3,6 @@ import discord
 from datetime import datetime
 from discord.ext import commands
 from utils.discordbot import Bot
-from utils.semifunc import SemiFunc
 from utils.files import files
 
 class OnMessageEdit(commands.Cog):

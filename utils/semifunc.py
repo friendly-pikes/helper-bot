@@ -25,9 +25,8 @@ class SemiFunc():
     banished_words = None
 
     afk_users = None
+    jobs = None
     
-    snowy_wants_to_die = True
-
     def update_banished(logger):
         data = Database.get_banished()
 
@@ -38,6 +37,13 @@ class SemiFunc():
         SemiFunc.banished_words = data['words']
         
         logger.info("Updating banished lists.")
+
+    def update_jobs(logger):
+        data = Database.get_jobs()
+
+        SemiFunc.jobs = data['jobs']
+        
+        logger.info("Updating jobs.")
 
     def update_afk(logger):
         data = Database.get_afks()
@@ -71,6 +77,10 @@ class SemiFunc():
         
         if type == "owner":
             if user.id in config['owners']:
+                return True
+            return False
+        elif type == "manager_only":
+            if user.id in config['managers']:
                 return True
             return False
         elif type == "manager":
@@ -117,36 +127,43 @@ class SemiFunc():
         return sorted_members.index(member) + 1
 
 
-    async def moderate_user(bot, ctx: Context, user: discord.Member, moderation_type: str, args: []):
+    async def moderate_user(bot, ctx: Context, user: discord.Member, moderation_type: str, args: list):
         moderation_embed = bot.create_embed_notitle()
         isGud = False
 
         
-        if moderation_type == "kick":
+        if moderation_type == "banish":
             isGud = True
-            moderation_embed.title = f"Staff at {files.get_server_name()}"
-            moderation_embed.description = f"You've been kicked from {files.get_server_name()} by {ctx.author.name} ({ctx.author.display_name})"
+            moderation_embed.title = f"Staff at {ctx.guild.name}"
+            moderation_embed.description = f"You've been banished in {ctx.guild.name} by {ctx.author.display_name}"
+            moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[0]}\nPunisher: {ctx.author.name}"
+            
+            bot.logger.info(f"{ctx.author.name} banished {user.name}. Reason: {args[0]}")
+        elif moderation_type == "kick":
+            isGud = True
+            moderation_embed.title = f"Staff at {ctx.guild.name}"
+            moderation_embed.description = f"You've been kicked from {ctx.guild.name} by {ctx.author.display_name}"
             moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[0]}\nPunisher: {ctx.author.name}\n\n\nServer Invite: https://discord.gg/X8QqpeYgGF"
             
             bot.logger.info(f"{ctx.author.name} kicked {user.name}. Reason: {args[0]}")
         elif moderation_type == "ban":
             isGud = True
-            moderation_embed.title = f"Staff at {files.get_server_name()}"
-            moderation_embed.description = f"You've been banned from {files.get_server_name()} permanently by {ctx.author.name} ({ctx.author.display_name})"
+            moderation_embed.title = f"Staff at {ctx.guild.name}"
+            moderation_embed.description = f"You've been banned from {ctx.guild.name} permanently by {ctx.author.display_name}"
             moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[0]}\nPunisher: {ctx.author.name}\n\n\nServer Invite: https://discord.gg/X8QqpeYgGF"
             
             bot.logger.info(f"{ctx.author.name} banned {user.name}. Reason: {args[0]}")
         elif moderation_type == "mute":
             isGud = True
-            moderation_embed.title = f"Staff at {files.get_server_name()}"
-            moderation_embed.description = f"You've been muted in {files.get_server_name()} by {ctx.author.name} ({ctx.author.display_name})"
+            moderation_embed.title = f"Staff at {ctx.guild.name}"
+            moderation_embed.description = f"You've been muted in {ctx.guild.name} by {ctx.author.display_name}"
             moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[0]}\nPunisher: {ctx.author.name}"
             
             bot.logger.info(f"{ctx.author.name} muted {user.name}. Reason: {args[0]}")
         elif moderation_type == "unmute":
             isGud = True
-            moderation_embed.title = f"Staff at {files.get_server_name()}"
-            moderation_embed.description = f"You've been unmuted in {files.get_server_name()} by {ctx.author.name} ({ctx.author.display_name})"
+            moderation_embed.title = f"Staff at {ctx.guild.name}"
+            moderation_embed.description = f"You've been unmuted in {ctx.guild.name} by {ctx.author.display_name}"
             moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[0]}\nPunisher: {ctx.author.name}"
 
             bot.logger.info(f"{ctx.author.name} unmuted {user.name}. Reason: {args[0]}")
@@ -245,62 +262,105 @@ class SemiFunc():
             else:
                 await user.add_roles(ctx.guild.get_role(vanity_role_sep), reason="They need the seperator")
 
-    async def pikesRadar(bot, user: discord.Member, radar: str):
-        forced_ignore = files._radar_ignore_force()
-        percent = random.randint(1, 100)
-        embed = bot.create_embed(color=discord.Color.pink())
-
-        emoji = "🎀"
-        if radar == "gay":
-            emoji = "🏳️‍🌈"
-
-
+    
+    def radar_description(user: discord.Member, radar: str, percent: int, emoji: str):
         # Ban 67.
         if percent == 67:
             if random.randint(1, 2) == 1:
                 # Use 66
                 percent = percent - 1
             else:
-                # Use 69
+                # Use 69.. nice
                 percent = percent + 2
 
-        # If in ignore radars, set the percent to 0
-        if user.id in forced_ignore['ignore'][radar]:
-            percent = 0
+        if radar == "rizz":
+            return f"{user.mention} has {percent}% {radar}! {emoji}"
+        else:
+            return f"{user.mention} is {percent}% {radar}! {emoji}"
 
-        # If in forced radars, set the percent to 101
-        if user.id in forced_ignore['forced'][radar]:
-            percent = 101
-        
-        if radar == "silly":
-            silly = SemiFunc.get_role_id(user, 'silly')
+    async def pikesRadar(bot, user: discord.Member, radar: str):
+        forced_ignore = files._radar_ignore_force()
+        embed = bot.create_embed(color=discord.Color.pink())
+        date = datetime.now().strftime("%d %B")
 
-            # If radar is silly and the user has silly role, force sillie!
-            if user.get_role(silly):
-                percent = 100
-
+        emoji = "🎀"
+        if radar == "gay":
+            emoji = "🏳️‍🌈"
 
         embed.title = f"{emoji} {radar.capitalize()} Radar {emoji}"
-        
-        if radar == "rizz":
-            embed.description = f"{user.mention} has {percent}% {radar}! {emoji}"
-        else:
-            embed.description = f"{user.mention} is {percent}% {radar}! {emoji}"
 
-        embed.color = discord.Color.pink()
+        user_name = user.nick
+
+        if user_name == None:
+            if user.global_name == None:
+                user_name = user.name
+            else:
+                user_name = user.global_name
         
-        if radar == "cute":
-            if percent >= 50 and percent < 80:
-                embed.description = f"{embed.description}\n{user.name} is totally cute!"
-            elif percent >= 80:
-                embed.description = f"{embed.description}\n{user.name} is **A D O R A B L E**!"
-        elif radar == "silly":
-            if percent >= 50 and percent < 80:
-                embed.description = f"{embed.description}\n{user.name} is totally silly!"
-            elif percent >= 80:
-                embed.description = f"{embed.description}\n{user.name} is **T O O  S I L L Y**!"
-        elif radar == "gay" and percent >= 50:
-            embed.description = f"{embed.description}\n{user.name} is totally gay!"
+        # 21/03/2026 - Preparing for april fools..
+        if date == "01 April":
+            fool = True
+
+            if user.id in forced_ignore['ignore'][radar]:
+                fool = False
+                embed.description = SemiFunc.radar_description(user, radar, random.randint(1, 100), emoji)
+
+            if user.id in forced_ignore['forced'][radar]:
+                fool = False
+                embed.description = SemiFunc.radar_description(user, radar, random.randint(1, 100), emoji)
+
+            if radar == "silly":
+                fool = False
+                silly = SemiFunc.get_role_id(user, 'silly')
+
+                # If radar is silly and the user has silly role, force sillie!
+                if user.get_role(silly):
+                    embed.description = SemiFunc.radar_description(user, radar, 100, emoji)
+                    
+
+            if radar == "cute" and user.id == 888072934114074624:
+                fool = True
+
+            if fool:
+                _what = ""
+                for letter in radar:
+                    _what = _what + f" {letter}"
+
+                embed.description = f"{user.mention} is ∞% {radar}! {emoji}\n{user_name} is **I N F I N I T E L Y**  **{_what.upper()}**"
+
+        else:
+            percent = random.randint(1, 100)
+
+            # If in ignore radars, set the percent to 0
+            if user.id in forced_ignore['ignore'][radar]:
+                percent = 0
+
+            # If in forced radars, set the percent to 101
+            if user.id in forced_ignore['forced'][radar]:
+                percent = 101
+
+            if radar == "silly":
+                silly = SemiFunc.get_role_id(user, 'silly')
+
+                # If radar is silly and the user has silly role, force sillie!
+                if user.get_role(silly):
+                    percent = 100
+
+            embed.description = SemiFunc.radar_description(user, radar, percent, emoji)
+
+            if radar == "cute":
+                if percent >= 50 and percent < 80:
+                    embed.description = f"{embed.description}\n{user_name} is totally cute!"
+                elif percent >= 80:
+                    embed.description = f"{embed.description}\n{user_name} is **A D O R A B L E**!"
+                    
+            elif radar == "silly":
+                if percent >= 50 and percent < 80:
+                    embed.description = f"{embed.description}\n{user_name} is totally silly!"
+                elif percent >= 80:
+                    embed.description = f"{embed.description}\n{user_name} is **T O O  S I L L Y**!"
+            elif radar == "gay" and percent >= 50:
+                embed.description = f"{embed.description}\n{user_name} is totally gay!"
         
         embed.set_footer(text="Bot developed by snow2code")
 
@@ -345,10 +405,11 @@ class SemiFunc():
                 bot.logger.info(msg=f"{author}: {message_content}")
             else:
                 content = f"/{interaction.command.name}"
-                
-                for option in interaction.data["options"]:
-                    content = f"{content} {option['name']}: {option['value']}"
-                    # content = f"{content} {option['value']}"
+                print(len(interaction.command.parameters))
+                if len(interaction.command.parameters) > 0:
+                    for option in interaction.data["options"]:
+                        content = f"{content} {option['name']}: {option['value']}"
+                        # content = f"{content} {option['value']}"
                 bot.logger.info(msg=f"{interaction.user.name}: {content}")
                 if interaction.command.name in files.get_staff_commands():
                     audit = ctx.guild.get_channel(SemiFunc.get_channel_id(ctx, "audit"))
@@ -363,4 +424,17 @@ class SemiFunc():
 
                     await audit.send(embed=moderation_embed)
                     # moderation_embed.set_footer(text=f"Bot developed by snow2code")
-                    
+    
+
+    ## SEMI FUNC KEEP
+    def in_string_strict(string: str, find_this: str):
+        if string.find(find_this) >= 0:
+            return True
+        return False
+    
+    def in_string(string: str, find_this: str):
+        string = string.lower()
+        find_this = find_this.lower()
+        if string.find(find_this) >= 0:
+            return True
+        return False

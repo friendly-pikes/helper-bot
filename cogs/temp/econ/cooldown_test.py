@@ -1,4 +1,3 @@
-import sqlite3
 
 from utils.econ import Economy
 from discord.ext import commands

@@ -23,6 +23,8 @@ class OnMemberJoin(commands.Cog):
                 can_give = True
                 if rolea == "bot" and member.bot == False:
                     can_give = False
+                if rolea == "bots" and member.bot == False:
+                    can_give = False
 
                 if can_give:
                     await member.add_roles(role, reason="Join Roles")

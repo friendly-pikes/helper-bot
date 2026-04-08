@@ -1,14 +1,8 @@
-import os
 import re
-import json
-import random
 import discord
 
-from datetime import datetime
 from discord.ext import commands
-from misc import banished_words_private as banished_words_privateA
 from utils.discordbot import Bot
-from utils.files import files
 from utils.semifunc import SemiFunc
 
 class BoostMessage(commands.Cog):
@@ -28,7 +22,8 @@ class BoostMessage(commands.Cog):
             if total_boosts == boosts:
                 total_boosts = total_boosts + 1
                 
-            await boosts_channel.send(f"Thanks for boosting our server {msg.author.mention}!\nWe now have a total of {total_boosts}!\n\n||or {boosts}, this is confusing qwq||")
+            await boosts_channel.send(f"Thanks for boosting our server {msg.author.mention}!\nWe now have a total of {total_boosts} boosts!\n\n||or {boosts}, this is confusing qwq||")
+            await boosts_channel.edit(topic=f"Thanks for the boosts! Total boosts: {total_boosts}")
 
             return
 

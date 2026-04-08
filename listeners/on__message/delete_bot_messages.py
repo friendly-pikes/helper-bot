@@ -19,7 +19,7 @@ class DeleteBotMessages(commands.Cog):
     async def on_message(self, msg: discord.Message):
         # 13/03/2026 - Bugfix: DMs can cause some issues.
         if not isinstance(msg.channel, discord.DMChannel):
-            if msg.author.bot:
+            # if msg.author.bot:
                 if len(msg.embeds) > 0:
                     for embed in msg.embeds:
                         # Dyno
