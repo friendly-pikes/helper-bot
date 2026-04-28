@@ -2,26 +2,29 @@
 .vscode/
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
+__pycache__
 
-# dotenv
+
+# You WANT this to be ignored, because it contains your bots token!
+## Shortly said. Anyone that has your bots token can login as your bot
+## and do whatever in any server it is in.. for example nuke a server depending on the bots perms
 .env
 
-# Private things. Release as needed to staff or whoever
-_private
 
-# Other
-.local
-
+# Other (ignored for user privacy and other)
 assets/join_message_images/*.*
 assets/profile_pictures/*.*
 
+## Snowy (Local ignore.)
 testing
+.local
+web/_old
 
 misc/temp
+misc/temp/test
 
 logs/*.log
 logs/errors/*
 
-* - Copy*
-* copy*
+# No user data
+data/user_data.*

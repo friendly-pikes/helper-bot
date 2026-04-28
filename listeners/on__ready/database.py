@@ -18,6 +18,9 @@ class OnReadyDatabase(commands.Cog):
                     user = Database.userdata_conn.cursor().execute(f'SELECT * FROM user_data WHERE user_id={member.id}')
                     if len(user.fetchall()) < 1:
                         Database.userdata_conn.cursor().execute(f'INSERT INTO user_data VALUES (0, {member.id}, "{member.name}", "NULL", 0, 0, 0)')
+                    else:
+                        print("TEMP")
+                        print(user)
             
             Database.userdata_conn.commit()
 

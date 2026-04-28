@@ -26,8 +26,11 @@ class OnMemberJoin(commands.Cog):
                 if rolea == "bots" and member.bot == False:
                     can_give = False
 
-                if can_give:
-                    await member.add_roles(role, reason="Join Roles")
+                try:
+                    if can_give:
+                        await member.add_roles(role, reason="Join Roles")
+                except discord.errors.Forbidden as e:
+                    self.bot.logger.warn(f"Cannot give {member.name} the role {role.name} because of a permission error - {e}")
             else:
                 self.bot.logger.warn(f"Cannot give {member.name} the role {rolea} as it doesn't exist!")
 

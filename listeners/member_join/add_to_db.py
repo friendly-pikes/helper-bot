@@ -11,10 +11,11 @@ class AddToDB(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
-        user = Database.userdata_conn.cursor().execute(f'SELECT * FROM user_data WHERE user_id={member.id}')
-        if len(user.fetchall()) < 1:
-            Database.userdata_conn.cursor().execute(f'INSERT INTO user_data VALUES (0, {member.id}, "{member.name}", "NULL", 0, 0, 0)')
-        self.bot.logger.info(f"Added {member.name} to database.")
+        async with Database.db_lock:
+            user = Database.userdata_conn.cursor().execute(f'SELECT * FROM user_data WHERE user_id={member.id}')
+            if len(user.fetchall()) < 1:
+                Database.userdata_conn.cursor().execute(f'INSERT INTO user_data VALUES (0, {member.id}, "{member.name}", "NULL", 0, 0, 0)')
+            self.bot.logger.info(f"Added {member.name} to database.")
 
 async def setup(bot):
     await bot.add_cog(AddToDB(bot))

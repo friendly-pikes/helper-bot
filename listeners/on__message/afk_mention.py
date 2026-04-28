@@ -49,6 +49,7 @@ class AFKMention(commands.Cog):
                                 if days > 1 or days == 0:
                                     days_text = "days"
 
+                                print(f"{mention.name} AFK\nminutes: {minutes}\nhours: {hours}\ndays: {days}")
                                 if minutes > 0 and hours == 0 and days == 0:
                                     await msg.reply(f"`{afk_user['name']}` is AFK: {afk_user['message']}\nThey've been AFK for {minutes} {minutes_text}")
                                 if hours > 0 and days == 0:

@@ -34,12 +34,12 @@ class Database():
             # Exists? Check if all tables exist.
             if os.path.exists(f"data/{database}.db"):
                 conn = sqlite3.connect(f"data/{database}.db")
-                cursor = conn.cursor()
+                # cursor = conn.cursor()
 
                 for table in databases[database]:
-                    cursor.execute(f"SELECT count(name) FROM sqlite_master WHERE type='table' AND name='{table['table_name']}'")
+                    data = conn.execute(f"SELECT count(name) FROM sqlite_master WHERE type='table' AND name='{table['table_name']}'")
                     
-                    if cursor.fetchone()[0] < 1:
+                    if data.fetchone()[0] < 1:
                         conn.execute(f"CREATE TABLE {table['table_name']} ({table['data']})")
 
                 conn.close()
@@ -68,13 +68,65 @@ class Database():
     jobs_conn = None
     userdata_conn = None
 
-    write_lock = asyncio.Lock()
+    db_lock = asyncio.Lock()
+
+    @classmethod
+    async def execute(self, database: str, query, params=()):
+        # async with self.db_lock:
+        conn = None
+        if database.lower() == "banished":
+            conn = Database.banished_conn
+        elif database.lower == "jobs":
+            conn = Database.jobs_conn
+        elif database.lower() == "userdata":
+            conn = Database.userdata_conn
+
+            
+        if conn != None:
+            conn.execute(query, params)
+            conn.commit()
+
+    @classmethod
+    async def fetchone(self, database: str, query, params=()):
+        async with self.db_lock:
+            conn = None
+            if database.lower() == "banished":
+                conn = Database.banished_conn
+            elif database.lower == "jobs":
+                conn = Database.jobs_conn
+            elif database.lower() == "userdata":
+                conn = Database.userdata_conn
+
+            
+            if conn != None:
+                cur = conn.execute(query, params)
+                return cur.fetchone()
+        return []
+
+    @classmethod
+    async def fetchall(self, database: str, query, params=()):
+        # async with self.db_lock:
+        conn = None
+        if database.lower() == "banished":
+            conn = Database.banished_conn
+        elif database.lower == "jobs":
+            conn = Database.jobs_conn
+        elif database.lower() == "userdata":
+            conn = Database.userdata_conn
+
+            
+        if conn != None:
+            cur = conn.execute(query, params)
+            return cur.fetchall()
+        return []
+            
 
     def get_jobs():
-        cursor = Database.jobs_conn.cursor()
+        # cursor = Database.jobs_conn.cursor()
 
-        cursor.execute("SELECT * FROM jobs ORDER BY job ASC")
-        jobs_raw = cursor.fetchall()
+        # cursor.execute("SELECT * FROM jobs ORDER BY job ASC")
+        # jobs_raw = cursor.fetchall()
+        jobs_raw = Database.fetchall("jobs", "SELECT * FROM jobs ORDER BY job ASC")
 
         result = {
             "jobs": []
@@ -90,10 +142,11 @@ class Database():
 
 
     def get_afks():
-        cursor = Database.userdata_conn.cursor()
+        # cursor = Database.userdata_conn.cursor()
 
-        cursor.execute("SELECT * FROM afk_users")
-        users_raw = cursor.fetchall()
+        # cursor.execute("SELECT * FROM afk_users")
+        # users_raw = cursor.fetchall()
+        users_raw = Database.fetchall("userdata", "SELECT * FROM afk_users")
 
         result = {
             "users": []
@@ -110,22 +163,27 @@ class Database():
         return result
     
     def get_banished():
-        cursor = Database.banished_conn.cursor()
+        # cursor = Database.banished_conn.cursor()
 
-        cursor.execute("SELECT * FROM banished_ids")
-        resultBanishedIds = cursor.fetchall()
+        # cursor.execute("SELECT * FROM banished_ids")
+        # resultBanishedIds = cursor.fetchall()
 
-        cursor.execute("SELECT * FROM banished_words_bypasses")
-        resultBypassesRaw = cursor.fetchall()
+        # cursor.execute("SELECT * FROM banished_words_bypasses")
+        # resultBypassesRaw = cursor.fetchall()
 
-        cursor.execute("SELECT * FROM banished_flagmsg")
-        resultFlagMsgRaw = cursor.fetchall()
+        # cursor.execute("SELECT * FROM banished_flagmsg")
+        # resultFlagMsgRaw = cursor.fetchall()
 
-        cursor.execute("SELECT * FROM banished_words_noignore")
-        resultNoIgnoreRaw = cursor.fetchall()
+        # cursor.execute("SELECT * FROM banished_words_noignore")
+        # resultNoIgnoreRaw = cursor.fetchall()
 
-        cursor.execute("SELECT * FROM banished_words")
-        resultBanishedWordsRaw = cursor.fetchall()
+        # cursor.execute("SELECT * FROM banished_words")
+        # resultBanishedWordsRaw = cursor.fetchall()
+        resultBanishedIds = Database.fetchall("banished", "SELECT * FROM banished_ids")
+        resultBypassesRaw = Database.fetchall("banished", "SELECT * FROM banished_words_bypasses")
+        resultFlagMsgRaw = Database.fetchall("banished", "SELECT * FROM banished_flagmsg")
+        resultNoIgnoreRaw = Database.fetchall("banished", "SELECT * FROM banished_words_noignore")
+        resultBanishedWordsRaw = Database.fetchall("banished", "SELECT * FROM banished_words")
 
         result = {
             "ids": [],

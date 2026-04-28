@@ -1,3 +1,5 @@
+import os
+import dotenv
 import discord
 
 from logging import Logger
@@ -6,11 +8,18 @@ from utils.custom.context import Context
 from utils.database import Database
 import utils.files as files
 
+## To be safe.
+# dotenv.load_dotenv()
+
 class Economy():
     def __init__(*args, **kargs):
         super().__init__(*args, **kargs)
 
-    def econ_embed(title: str="Title", description: str="Description", user: discord.Member=None, fields: [] = []):
+    def get_web_address():
+        # return os.getenv('WEB_ADDRESS')
+        return "http://fluffy-concourse.vercel.app/econ/leaderboard.html"
+
+    def econ_embed(title: str="Title", description: str="Description", user: discord.Member=None, fields: list = []):
         embed = discord.Embed(title=title,description=description,color=discord.Color.pink())
 
         if len(fields) > 0:

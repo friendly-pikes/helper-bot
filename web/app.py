@@ -4,7 +4,7 @@ import logging
 import importlib
 import dotenv
 
-from flask import Flask, Response, send_from_directory
+from flask import Flask, Response, send_from_directory, redirect, request
 from werkzeug.serving import run_simple
 from utils.discordbot import Bot
 
@@ -37,9 +37,16 @@ def create_app():
         response.headers["Expires"] = "0"
         return response
     
+    # @app.before_request
+    # def force_https():
+    #     if request.endpoint in app.view_functions and not request.is_secure:
+    #         return redirect(request.url.replace("http://", "https://"))
+
     @app.route("/")
-    def api_help():
+    def home():
         return send_from_directory("", "index.html")
+
+
         # importlib.reload(misc_module)
         
         # return Response(
@@ -47,22 +54,37 @@ def create_app():
         #     mimetype="application/json"
         # )
     
-    @app.errorhandler(404)
-    def api_help_404(error):
-        importlib.reload(misc_module)
+    @app.route("/api/*")
+    def api_help():
         
         return Response(
             json.dumps(misc_module.INFO, indent=4),
             mimetype="application/json"
         )
     
-    # @app.route("/")
-    # def home():
-    #     # return "am alive!!\n..maybe-"
+    @app.route('/<path:path>')
+    def file(path: str):
+        if path.startswith("api"):
+            return Response(
+                json.dumps(misc_module.INFO, indent=4),
+                mimetype="application/json"
+            )
         
-    #     return send_from_directory("", "index.html")
-    #     # return render_template('index.php')
+        return send_from_directory("", "index.html")
+        # if path.startswith(('__pycache__', '_old', 'hidden', 'routes', 'templates')):
+        #     return send_from_directory("hidden", "missing.html")
 
+
+        # if os.path.exists(f"web/{path}/index.html"):
+        #     return send_from_directory("", f"{path}/index.html")
+        # if os.path.exists(f"web/{path}"):
+        #     return send_from_directory("", path)
+        # if os.path.exists(f"web/{path}.html"):
+        #     return send_from_directory("", f"{path}.html")
+            
+        # return send_from_directory("hidden", "missing.html")
+
+    
     # @app.errorhandler(404)
     # def notfound(error):
     #     return send_from_directory("", "index.html")
@@ -92,6 +114,8 @@ def reload_all():
     global current_app, wrapper, api_module, apiprivate_module
 
     print("Procedure beginning shortly...")
+    
+    importlib.reload(misc_module)
 
     if current_app != None:
         api_module = importlib.reload(api_module)
@@ -119,4 +143,8 @@ def run():
 
     wrapper = AppWrapper(current_app)
 
-    run_simple("0.0.0.0", port, wrapper, ssl_context='adhoc')
+    ## HTTPS
+    # run_simple("0.0.0.0", port, wrapper, ssl_context='adhoc')
+
+    ## HTTP
+    run_simple("0.0.0.0", port, wrapper)

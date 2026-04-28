@@ -1,11 +1,13 @@
 import re
+import json
 import requests
+import importlib
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from utils.discordbot import Bot
 from utils.database import Database
 from utils.semifunc import SemiFunc
-from web.misc_func import *
+import web.misc_func as misc_module
 
 api = Blueprint("api", __name__)
 bot: Bot = None
@@ -15,6 +17,16 @@ def update(bot_instance: Bot):
     bot = bot_instance
 
 # Shorter stuff, then big stuff
+
+@api.route("/api/botCredits", methods=["GET"])
+@api.route("/botCredits", methods=["GET"])
+def botCredits():
+    
+    return Response(
+        json.dumps(misc_module.credits, indent=4),
+        mimetype="application/json"
+    )
+
 @api.route("/api/getJobs", methods=["GET"])
 @api.route("/getJobs", methods=["GET"])
 def getJobs():
@@ -70,19 +82,19 @@ def getLeaderboard():
 
     # we need "?type=whatever" in the url.
     if type == None:
-        return response_error("required_param", "type", None)
+        return misc_module.response_error("required_param", "type", None)
     else:
         # Check the type
         if type.lower() in ["used", "all"]:
             pass
         else:
-            return response_error("bad_param", "type", "Valid paramaters are: used and all")
+            return misc_module.response_error("bad_param", "type", "Valid paramaters are: used and all")
 
 
     if type.lower() == "used":
-        leaderboard = leaderboard_Data(bot, 0)
+        leaderboard = misc_module.leaderboard_Data(bot, 0)
     elif type.lower() == "all":
-        leaderboard = leaderboard_Data(bot, -1)
+        leaderboard = misc_module.leaderboard_Data(bot, -1)
 
     return jsonify(leaderboard)
 
@@ -92,7 +104,7 @@ def banishCheck():
     sentence = request.args.get("sentence")
     
     if sentence == None:
-        return response_error("required_param", "sentence", None)
+        return misc_module.response_error("required_param", "sentence", None)
 
     # Copied from listeners.on__message.banish_message out of laziness
     banished = SemiFunc.banished_words
@@ -128,7 +140,7 @@ def banishCheck():
 @api.route("/api/getUsers", methods=["GET"])
 @api.route("/getUsers", methods=["GET"])
 def getUsers():
-    user_data = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data").fetchall()
+    user_data = Database.userdata_conn.execute(f"SELECT * FROM user_data").fetchall()
     users = []
     nicks = []
 

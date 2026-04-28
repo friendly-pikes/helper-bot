@@ -26,7 +26,8 @@ class SemiFunc():
 
     afk_users = None
     jobs = None
-    
+
+   
     def update_banished(logger):
         data = Database.get_banished()
 
@@ -81,7 +82,11 @@ class SemiFunc():
         # if ctx.channel.id in ignore_channels:
         #     return False
         
-        if type == "owner":
+        if type == "test":
+            if user.id in config['testers']:
+                return True
+            return False
+        elif type == "owner":
             if user.id in config['owners']:
                 return True
             return False
@@ -304,7 +309,7 @@ class SemiFunc():
                 user_name = user.global_name
         
         # 21/03/2026 - Preparing for april fools..
-        if date == "01 April":
+        if date == "01 April" or user.id in forced_ignore['infinity'][radar]:
             fool = True
 
             if user.id in forced_ignore['ignore'][radar]:

@@ -21,22 +21,35 @@
         {"activity": "custom", "message": "\"I forgot that you corrupted!\" Â¯\\_(ãƒ„)_/Â¯"}
     ],
     "random_messages": [
-        "Beep",
         "Beep boop",
         "Boop",
         "Blep",
         "Mlem",
-        "What to do, what to do.. try and steal the ram on top of the fridge it is!"
+        "What to do, what to do.. try and steal the ram on top of the fridge it is!",
+
+        
+        "Up from the sky, I won't want you to cry.\nSo here's an act for everyone to sneer at",
+        
+        "Am I just a passing droplet?\nAm I easy to forget?.",
+
+        "It could be tomorroww, It could be todayyy",
+        "I hope I've said 'I love you' enough~",
+
+        "Not enough for anyone's love",
+        
+        "I think they see me as infamous",
+
+
+        "That's our silly plan.",
+
+        "I forgot that you, exist!~"
     ],
-    "_UNUSED INFO": "These random messages didn't make the cut.",
-    "random_messages_unused": [
-        "Beep beep",
-        "Beep boop",
-        "Bleep bloop",
-        "Beep-bop-boop",
-        "Blarp-a-barp",
-        "Beep",
-        "Robot noises"
+
+    "_random unused": [
+        "Didn't make the cut.",
+
+
+        "We're fragile creatures made of love\nWe could act impulsive when our lives get tough\nSo if I were to die\nBefore I could say bye (Bye, bye, byе)\nI hope I've said 'I love you' еnough"
     ],
 
 

@@ -1,4 +1,5 @@
 import discord
+import sqlite3
 
 from utils.database import Database
 from datetime import datetime
@@ -39,6 +40,7 @@ class AFKReturn(commands.Cog):
                             minutes = (seconds % 3600) // 60
                             # secondsB = seconds & 60
 
+                            print(f"{msg.author.name} AFK\nminutes: {minutes}\nhours: {hours}\ndays: {days}")
                             if minutes > 1:
                                 hours_text = "hour"
                                 minutes_text = "minute"
@@ -52,11 +54,15 @@ class AFKReturn(commands.Cog):
                                     days_text = "days"
                                 
                                 ## Remove from database
-                                conn = Database.userdata_conn
-                                conn.execute(f"DELETE FROM afk_users WHERE user_id = {afk_user['user_id']}")
-                                conn.commit()
+                                try:
+                                    conn = Database.userdata_conn
+                                    conn.execute(f"DELETE FROM afk_users WHERE user_id = {afk_user['user_id']}")
+                                    conn.commit()
 
-                                SemiFunc.update_afk(self.bot.logger)
+                                    SemiFunc.update_afk(self.bot.logger)
+                                except sqlite3.OperationalError as e:
+                                    self.bot.logger.warn(f"Unable to remove {msg.author.name}'s AFK status - {e}")
+                                    await msg.reply('I was unable to remove your afk status!\nThe database *might* be "locked"')
 
                                 ## Now return message
                                 try:

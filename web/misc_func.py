@@ -4,8 +4,56 @@ from flask import Response
 from utils.discordbot import Bot
 from utils.database import Database
 
+credits = {
+    "its on the page instead now - snowy"
+    # "Emotional support": [
+    #     "coffeetimeu3u (coffee)",
+    #     "dragonyeer_ (Dergy)"
+    # ],
+
+    # "Support and Moviation": [
+    #     "everteartheinteraowo (𝓔𝓿𝓮𝓻𝓣𝓮𝓪𝓻 / Pixie)",
+    #     "suavellynoama (Leo)",
+    #     "maxi_the_musketeer (Maxi)",
+    #     "chilly_dafur (𝓒𝓱𝓲𝓵𝓵𝓵𝔂)"
+    # ],
+
+    # "Suggestions": {
+    #     "everteartheinteraowo (𝓔𝓿𝓮𝓻𝓣𝓮𝓪𝓻 / Pixie)": [
+    #         "Command to prevent AFK Status from being removed",
+    #         "Economy System"
+    #     ],
+    # },
+
+    # "Testers": [
+    #     "._.nat.th3.calico.cat._. (Natalie)", #: "Command expections"
+    #     "maxi_the_musketeer (Maxi)",
+    #     "coffeetimeu3u (coffee)",
+    #     "boeing_727 (Boeing / Dex)",
+    #     "_doxxy_. (Doxxy)"
+    # ]
+}
+
+nav = """
+<div class="navbar">
+    <div class="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+    <ul class="nav-menu">
+        <li>  <a href='/'>Home</a>  </li>
+        <li>  <a href='/bot-info'>Bot Info</a>  </li>
+        <li>  <a href='/econ'>Economy</a>  </li>
+        <!-- <li>  <a href='/banish-checker'>Banished Checker</a>  </li> -->
+        <!-- <li>  <a href='/leaderboard'>Leaderboard</a>  </li> -->
+    </ul>
+</div>
+"""
+
+
 def leaderboard_Data(bot: Bot, value: int):
-    user_data = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data ORDER BY tokens DESC").fetchall()
+    user_data = Database.userdata_conn.execute(f"SELECT * FROM user_data ORDER BY tokens DESC").fetchall()
     leader = []
 
     for _user in user_data:
@@ -56,7 +104,7 @@ def response_error(error_type, param, misc):
 # Probably a better way to do this.. but eh.
 INFO = {
     "message": "Fluffy Helper's Web API",
-    "version": "1.1.0",
+    "version": "1.1.3",
     "endpoints": {
         "public": {
             "POST /getLeaderboard": "Get the server leaderboard",

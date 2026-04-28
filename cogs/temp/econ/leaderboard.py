@@ -41,7 +41,8 @@ class Econ__Leaderboard(commands.Cog):
                     'balance': user[4]
                 })
 
-        embed: discord.Embed = Economy.econ_embed(title="Balance Leaderboard", description="View the [online leaderboard](https://fluffy-helper.page.gd/econ/leaderboard).")
+        # https://fluffy-helper.page.gd/econ/leaderboard
+        embed: discord.Embed = Economy.econ_embed(title="Balance Leaderboard", description=f"View the [online leaderboard]({Economy.get_web_address()}).")
         embed.set_author(name=ctx.guild.name, icon_url=ctx.guild.icon)
         embed.set_thumbnail(url=self.bot.user.avatar.url)
         i = 1
