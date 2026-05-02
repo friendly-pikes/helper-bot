@@ -38,7 +38,7 @@ class Econ__Slots(commands.Cog):
             await ctx.reply(f"You are on cooldown! Please try again tomorrow.")
             return
         
-        user = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
+        user = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
         if bet > user[4] or user[4] == 0:
             await ctx.reply(f"You don't have enough to bet.")
             return
@@ -83,7 +83,7 @@ class Econ__Slots(commands.Cog):
             earning = -bet
             new_bal = user[4] - bet
 
-        Database.userdata_conn.cursor().execute(f"UPDATE user_data SET tokens=? WHERE user_id=?", (new_bal, ctx.author.id))
+        Database.userdata_conn.execute(f"UPDATE user_data SET tokens=? WHERE user_id=?", (new_bal, ctx.author.id))
         Database.userdata_conn.commit()
 
         embed = discord.Embed(title=f"Slot Machine", color=discord.Color.green())

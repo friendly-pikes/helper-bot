@@ -15,13 +15,17 @@ class OnReadyDatabase(commands.Cog):
             # Fuck my fluffy life.. getting members from create_databases didn't work, on_ready it is...
             for member in guild.members:
                 if member.bot == False:
-                    user = Database.userdata_conn.cursor().execute(f'SELECT * FROM user_data WHERE user_id={member.id}')
+                    user = Database.userdata_conn.execute(f'SELECT * FROM user_data WHERE user_id={member.id}')
                     if len(user.fetchall()) < 1:
-                        Database.userdata_conn.cursor().execute(f'INSERT INTO user_data VALUES (0, {member.id}, "{member.name}", "NULL", 0, 0, 0)')
+                        Database.userdata_conn.execute(f'INSERT INTO user_data VALUES (0, {member.id}, "{member.name}", "NULL", 0, 0, 0)')
                     else:
-                        print("TEMP")
-                        print(user)
-            
+                        data = Database.userdata_conn.execute(f'SELECT * FROM user_data WHERE user_id={member.id}').fetchone()
+                        if data != None:
+                            user_name = data[2]
+
+                            if member.name != user_name:
+                                Database.userdata_conn.execute(f"UPDATE user_data SET alise=? WHERE user_id=?", (member.name, member.id))
+                                # Database.userdata_conn.commit()
             Database.userdata_conn.commit()
 
         print("Added all users to database.")

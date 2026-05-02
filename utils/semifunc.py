@@ -5,6 +5,7 @@ import asyncio
 import utils.files as files
 from datetime import datetime
 
+from typing import Union
 from utils.custom.context import Context
 from utils.database import Database
 
@@ -59,8 +60,13 @@ class SemiFunc():
         
         logger.info("Updating AFK Users.")
 
-    def get_channel_id(ctx, channelname: str):
-        channelids = files.get_channel_ids(ctx.guild.id)
+    def get_channel_id(ctx: Union[Context, int], channelname: str):
+        channelids = None
+        try:
+            channelids = files.get_channel_ids(ctx)
+        except AttributeError:
+            channelids = files.get_channel_ids(ctx.guild.id)
+
         if channelids[channelname]:
             return channelids[channelname]
         return None
@@ -82,7 +88,11 @@ class SemiFunc():
         # if ctx.channel.id in ignore_channels:
         #     return False
         
-        if type == "test":
+        if type == "bot_dev":
+            if user.id in config['owner_ids']:
+                return True
+            return False
+        elif type == "test":
             if user.id in config['testers']:
                 return True
             return False
@@ -286,30 +296,42 @@ class SemiFunc():
 
         if radar == "rizz":
             return f"{user.mention} has {percent}% {radar}! {emoji}"
+        elif radar == "fem":
+            return f"{user.mention} is {percent}% feminine! {emoji}"
         else:
             return f"{user.mention} is {percent}% {radar}! {emoji}"
-
-    async def pikesRadar(bot, user: discord.Member, radar: str):
+    
+    async def pikesRadar(bot, user: Union[discord.Member, discord.User], radar: str):
         forced_ignore = files._radar_ignore_force()
         embed = bot.create_embed(color=discord.Color.pink())
         date = datetime.now().strftime("%d %B")
+        radar_text = radar
+
+        if radar == "fem":
+            radar_text = "feminine"
 
         emoji = "🎀"
         if radar == "gay":
             emoji = "🏳️‍🌈"
 
-        embed.title = f"{emoji} {radar.capitalize()} Radar {emoji}"
+        if radar == "fem":
+            embed.title = f"{emoji} Femboy Radar {emoji}"
+        else:
+            embed.title = f"{emoji} {radar.capitalize()} Radar {emoji}"
 
-        user_name = user.nick
+        user_name = user.display_name
+        
+        if isinstance(user, discord.Member):
+            user_name = user.nick
 
-        if user_name == None:
-            if user.global_name == None:
-                user_name = user.name
-            else:
-                user_name = user.global_name
+            if user_name == None:
+                if user.global_name == None:
+                    user_name = user.name
+                else:
+                    user_name = user.global_name
         
         # 21/03/2026 - Preparing for april fools..
-        if date == "01 April" or user.id in forced_ignore['infinity'][radar]:
+        if date == "01 April":
             fool = True
 
             if user.id in forced_ignore['ignore'][radar]:
@@ -320,13 +342,14 @@ class SemiFunc():
                 fool = False
                 embed.description = SemiFunc.radar_description(user, radar, random.randint(1, 100), emoji)
 
-            if radar == "silly":
-                fool = False
-                silly = SemiFunc.get_role_id(user, 'silly')
+            if isinstance(user, discord.Member):
+                if radar == "silly":
+                    fool = False
+                    silly = SemiFunc.get_role_id(user, 'silly')
 
-                # If radar is silly and the user has silly role, force sillie!
-                if user.get_role(silly):
-                    embed.description = SemiFunc.radar_description(user, radar, 100, emoji)
+                    # If radar is silly and the user has silly role, force sillie!
+                    if user.get_role(silly):
+                        embed.description = SemiFunc.radar_description(user, radar, 100, emoji)
                     
 
             if radar == "cute" and user.id == 888072934114074624:
@@ -340,6 +363,19 @@ class SemiFunc():
                 embed.description = f"{user.mention} is ∞% {radar}! {emoji}\n{user_name} is **I N F I N I T E L Y**  **{_what.upper()}**"
 
         else:
+            if user.id in forced_ignore['infinity'][radar]:
+                _what = ""
+                for letter in radar:
+                    _what = _what + f" {letter}"
+
+                if radar == "fem":
+                    embed.description = f"{user.mention} is ∞% {radar}! {emoji}\n{user_name} is **I N F I N I T E L Y    F E M I N I N E**"
+                else:
+                    embed.description = f"{user.mention} is ∞% {radar}! {emoji}\n{user_name} is **I N F I N I T E L Y**  **{_what.upper()}**"
+
+                embed.set_footer(text="Bot developed by snow2code")
+                return embed
+
             percent = random.randint(1, 100)
 
             # If in ignore radars, set the percent to 0
@@ -350,12 +386,13 @@ class SemiFunc():
             if user.id in forced_ignore['forced'][radar]:
                 percent = 101
 
-            if radar == "silly":
-                silly = SemiFunc.get_role_id(user, 'silly')
+            if isinstance(user, discord.Member):
+                if radar == "silly":
+                    silly = SemiFunc.get_role_id(user, 'silly')
 
-                # If radar is silly and the user has silly role, force sillie!
-                if user.get_role(silly):
-                    percent = 100
+                    # If radar is silly and the user has silly role, force sillie!
+                    if user.get_role(silly):
+                        percent = 100
 
             embed.description = SemiFunc.radar_description(user, radar, percent, emoji)
 
@@ -372,6 +409,15 @@ class SemiFunc():
                     embed.description = f"{embed.description}\n{user_name} is **T O O  S I L L Y**!"
             elif radar == "gay" and percent >= 50:
                 embed.description = f"{embed.description}\n{user_name} is totally gay!"
+            
+            # 30/04/2026 chilly_dafur: Add femdar
+            elif radar == "fem":
+                if percent >= 80 and percent < 90:
+                    embed.description = f"{embed.description}\n{user_name} is quite feminine!"
+                elif percent >= 90 and percent < 100:
+                    embed.description = f"{embed.description}\n{user_name} is totally feminine!"
+                elif percent == 100 or percent == 101:
+                    embed.description = f"{embed.description}\n{user_name} is very feminine!"
         
         embed.set_footer(text="Bot developed by snow2code")
 
@@ -414,6 +460,20 @@ class SemiFunc():
         if files.get_config_entry("output_on_command_used_enabled"):
             if interaction == None:
                 bot.logger.info(msg=f"{author}: {message_content}")
+
+                if ctx.command.name in files.get_staff_commands():
+                    audit = ctx.guild.get_channel(SemiFunc.get_channel_id(ctx, "audit"))
+                    moderation_embed = bot.create_embed_notitle()
+
+                    moderation_embed.description = f"Used `{ctx.command.name}` command in <#{ctx.channel.id}>"
+                    moderation_embed.description = f"{moderation_embed.description}\n{message_content}"
+                    moderation_embed.color = discord.Color.blue()
+
+                    moderation_embed.timestamp = datetime.utcnow()
+                    moderation_embed.set_author(name=ctx.author.name, icon_url=ctx.author.avatar)
+
+                    await audit.send(embed=moderation_embed)
+                    # moderation_embed.set_footer(text=f"Bot developed by snow2code")
             else:
                 content = f"/{interaction.command.name}"
 

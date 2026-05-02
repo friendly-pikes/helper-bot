@@ -18,11 +18,11 @@ responses = [
         "reply": "How about YOU shut up instead!?",
         "only": "None"
     },
-    {
-        "search_word": "clanker",
-        "reply": "You're the clanker.",
-        "only": "None"
-    },
+    # {
+    #     "search_word": "clanker",
+    #     "reply": "You're the clanker.",
+    #     "only": "None"
+    # },
 
     ## Affection
     {
@@ -101,6 +101,12 @@ class ShutUp(commands.Cog):
         for mention in msg.mentions:
             # If the mentioned user is the bot.
             if mention.id == self.bot.user.id:
+                if SemiFunc.in_string(msg.content, 'clanker'):
+                    await msg.reply("Do not call me that.")
+                    await msg.delete()
+                    return
+                
+                
                 for response in responses:
                     users = get_users_config_entry(response['only'])
 

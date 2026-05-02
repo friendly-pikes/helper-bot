@@ -54,8 +54,8 @@ class Econ__Steal(commands.Cog):
 
         if random.randint(1, 100) < success_rate:
             amount = random.randint(5, 10)
-            user_bal = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()[4]
-            user_steal_bal = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={user.id}").fetchone()[4]
+            user_bal = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()[4]
+            user_steal_bal = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={user.id}").fetchone()[4]
 
             if user_steal_bal == 0:
                 await ctx.reply("They don't have anything for you to steal.")
@@ -74,7 +74,7 @@ class Econ__Steal(commands.Cog):
                 self.bot.logger.info(f"Unable to DM {user.name} to let them know that {ctx.author.name} stole {amount} {Economy.get_curreny_name()} from them.")
             await ctx.reply(f"You successfully stole {amount} {Economy.get_curreny_name()} from {user.mention}!")
         else:
-            data = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
+            data = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
             bal = data[4]
             fine = random.randint(2, 7)
 

@@ -9,7 +9,9 @@ import logging.handlers
 
 from utils.custom.context import Context
 # from utils import permissions
-import utils.files as files
+from utils.files import files
+from utils.semibot import SemiBot
+
 from discord.ext.commands import AutoShardedBot, DefaultHelpCommand
 
 class Bot(AutoShardedBot):
@@ -159,27 +161,38 @@ class Bot(AutoShardedBot):
 
             if gud:
                 for sub in os.listdir(f"cogs/{who}"):
-                    if sub != "__pycache__":
-                        if sub.endswith(".py"):
-                            commands = commands + 1
-                            name = sub[:-3]
-                            await self.load_extension(f"cogs.{who}.{name}")
+                    gud_test = True
+                    if sub == "test":
+                        if self.user.id == 1482861019582693507:
+                            self.logger.info("Load test commands.")
+                            gud_test = True
                         else:
-                            for file in os.listdir(f"cogs/{who}/{sub}"):
-                                # Ignore files that aren't .py files
-                                if not file.endswith(".py"):
-                                    continue
-                                
+                            self.logger.info("Don't load test commands.")
+                            gud_test = False
+
+                        
+                    if gud_test == True:
+                        if sub != "__pycache__":
+                            if sub.endswith(".py"):
                                 commands = commands + 1
-                                name = file[:-3]
-                                await self.load_extension(f"cogs.{who}.{sub}.{name}")
+                                name = sub[:-3]
+                                await self.load_extension(f"cogs.{who}.{name}")
+                            else:
+                                for file in os.listdir(f"cogs/{who}/{sub}"):
+                                    # Ignore files that aren't .py files
+                                    if not file.endswith(".py"):
+                                        continue
+                                    
+                                    commands = commands + 1
+                                    name = file[:-3]
+                                    await self.load_extension(f"cogs.{who}.{sub}.{name}")
         
         print(f"Loaded {commands} command files.\nLoaded {listeners} listener files.")
     
     async def process_commands(self, msg: discord.Message):
         ctx = await self.get_context(msg, cls=Context)
         
-        if msg.content.lower().find("&topic") == 0:
+        if msg.content.lower().find("&topic") >= 0:
             with open(files.get_filepath("commands", "json"), "r", encoding="utf8") as file:
                 data = json.load(file)
                 topics = data['topics']
@@ -187,6 +200,10 @@ class Bot(AutoShardedBot):
                 topic = random.choice(topics)
 
                 await ctx.send(f"{topic}?")
+        elif msg.content.lower().find("&joke") >= 0:
+            selected_joke = SemiBot.get_joke()
+            
+            await ctx.send(selected_joke)
         else:
             await self.invoke(ctx)
 

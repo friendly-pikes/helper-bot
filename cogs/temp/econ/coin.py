@@ -40,7 +40,7 @@ class Econ__Coin(commands.Cog):
             # await ctx.message.delete()
             return
         
-        user = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
+        user = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
         if bet > user[4] or user[4] == 0:
             await ctx.reply(f"You don't have enough to bet.")
             return
@@ -73,7 +73,7 @@ class Econ__Coin(commands.Cog):
                         description=f"Congrats, the coin landed on {choice.value}!\nYou won {bal_addition} {Economy.get_curreny_name()}!"
                 )
 
-                Database.userdata_conn.cursor().execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (bal + bal_addition, ctx.author.id))
+                Database.userdata_conn.execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (bal + bal_addition, ctx.author.id))
                 Database.userdata_conn.commit()
                 await ctx.reply(embed=embed)
             else:

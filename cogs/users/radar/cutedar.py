@@ -1,5 +1,7 @@
 import discord
 
+from typing import Union
+from discord import app_commands
 from discord.ext import commands
 from utils.custom.context import Context
 from utils.discordbot import Bot
@@ -9,34 +11,36 @@ class UserCommands__Radar__Cutedar(commands.Cog):
     def __init__(self, bot):
         self.bot: Bot = bot
 
-    @commands.guild_only()
-    @commands.hybrid_command(name="cutedar")
-    async def cutedar(self, ctx: Context, user: discord.Member):
+    # @commands.guild_only()
+    @commands.hybrid_command(name="cutedar", aliases=["howcute"])
+    @app_commands.allowed_installs(guilds=True, users=True)
+    @app_commands.allowed_contexts(guilds=True, dms=True, private_channels=True)
+    async def cutedar(self, ctx: Union[Context, commands.context.Context], user: Union[discord.Member, discord.User]):
         """
         See how cute someone is!
 
         Parameters
         ----------
-        ctx: Context
+        ctx: Union[Context, commands.context.Context]
             The context of the command invocation
-        user: discord.Member
+        user: user: Union[discord.Member, discord.User]
             The user to use the radar on
         """
-        if user:
-            if user.bot:
-                await ctx.reply("Not able to use radar commads on bots.")
-                return
+        if user.bot:
+            await ctx.reply("Not able to use radar commads on bots.")
+            return
             
-            if SemiFunc.command_disabled(ctx):
-                await ctx.reply("That command is currently disabled.")
-                return
+        # # if SemiFunc.command_disabled(ctx):
+        # #     await ctx.reply("That command is currently disabled.")
+        # #     return
+
+        embed = await SemiFunc.pikesRadar(self.bot, user, "cute")
             
+        if not isinstance(ctx.channel, discord.DMChannel):
+            print(ctx.message.content)
             await SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction, ctx)
-        
-            embed = await SemiFunc.pikesRadar(self.bot, user, "cute")
-            await ctx.reply(embed=embed)
-        else:
-            await ctx.reply("Can't use radar commands on noone!")
+
+        await ctx.send(embed=embed)
             
 async def setup(bot):
     await bot.add_cog(UserCommands__Radar__Cutedar(bot))

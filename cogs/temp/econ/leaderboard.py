@@ -31,7 +31,7 @@ class Econ__Leaderboard(commands.Cog):
             # await ctx.message.delete()
             return
         
-        user_data = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data ORDER BY tokens DESC").fetchmany(10)
+        user_data = Database.userdata_conn.execute(f"SELECT * FROM user_data ORDER BY tokens DESC").fetchmany(10)
         top10 = []
 
         for user in user_data:

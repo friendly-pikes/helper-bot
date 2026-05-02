@@ -75,45 +75,42 @@ class UserCommands__Misc__AFK(commands.Cog):
 
         await SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction, ctx)
         
-        async with Database.db_lock:
-            is_already_afk = False
+        is_already_afk = False
 
-            for user in SemiFunc.afk_users:
-                if user['user_id'] == ctx.author.id:
-                    is_already_afk = True
+        for user in SemiFunc.afk_users:
+            if user['user_id'] == ctx.author.id:
+                is_already_afk = True
 
-            if is_already_afk:
-                await ctx.reply("Cannot change your status to AFK because you've already used ?afk or /afk. Did you mean to use ?afkupdate?")
-            else:
-                cursor = Database.userdata_conn.cursor()
-                    
-                nick = usernick(ctx)
-                afkSince_createdat = ctx.message.created_at.strftime("%d/%m/%Y %H:%M")
+        if is_already_afk:
+            await ctx.reply("Cannot change your status to AFK because you've already used ?afk or /afk. Did you mean to use ?afkupdate?")
+        else:
+            nick = usernick(ctx)
+            afkSince_createdat = ctx.message.created_at.strftime("%d/%m/%Y %H:%M")
 
-                cursor.execute(f'INSERT INTO afk_users VALUES ({ctx.author.id}, "{nick['nick']}", "{message}", "{afkSince_createdat}", 0)')
+            Database.userdata_conn.execute(f'INSERT INTO afk_users VALUES ({ctx.author.id}, "{nick['nick']}", "{message}", "{afkSince_createdat}", 0)')
 
-                Database.userdata_conn.commit()
+            Database.userdata_conn.commit()
 
-                try:
-                    if len(nick['nick']) > 26:
-                        msg = f"I've set your status to AFK with the message `{message}`"
-                        if len(nick['errors']) > 0:
-                            msg = f"{msg}\n..however:"
+            try:
+                if len(nick['nick']) > 26:
+                    msg = f"I've set your status to AFK with the message `{message}`"
+                    if len(nick['errors']) > 0:
+                        msg = f"{msg}\n..however:"
 
-                        for error in nick['errors']:
-                            msg = f"{msg}\n{error}"
-                        await ctx.reply(msg)
-                    else:
-                        await ctx.author.edit(nick=f"[AFK] {nick['nick']}")
-                        await ctx.reply(f"I've set your status to AFK with the message `{message}`")
-                except Forbidden as e:
-                    if e.text == "Missing Permissions":
-                        await ctx.reply(f"I've set your status to AFK with the message `{message}`\n..however I cannot change your nickname to show you're AFK.")
-                # except CommandInvokeError as e:
-                #     print(e)
+                    for error in nick['errors']:
+                        msg = f"{msg}\n{error}"
+                    await ctx.reply(msg)
+                else:
+                    await ctx.author.edit(nick=f"[AFK] {nick['nick']}")
+                    await ctx.reply(f"I've set your status to AFK with the message `{message}`")
+            except Forbidden as e:
+                if e.text == "Missing Permissions":
+                    await ctx.reply(f"I've set your status to AFK with the message `{message}`\n..however I cannot change your nickname to show you're AFK.")
+            # except CommandInvokeError as e:
+            #     print(e)
 
-                # Update the AFK users list
-                await SemiFunc.update_afk(self.bot.logger)
+            # Update the AFK users list
+            SemiFunc.update_afk(self.bot.logger)
         
         
     @commands.guild_only()
@@ -146,26 +143,23 @@ class UserCommands__Misc__AFK(commands.Cog):
 
         await SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction, ctx)
         
-        async with Database.db_lock:
-            is_already_afk = False
+        is_already_afk = False
 
-            for user in SemiFunc.afk_users:
-                if user['user_id'] == ctx.author.id:
-                    is_already_afk = True
+        for user in SemiFunc.afk_users:
+            if user['user_id'] == ctx.author.id:
+                is_already_afk = True
 
-            if is_already_afk:
-                cursor = Database.userdata_conn.cursor()
+        if is_already_afk:
+            Database.userdata_conn.execute(f"UPDATE afk_users SET message=? WHERE user_id = ?", (message, ctx.author.id))
+            await ctx.reply(f"I've set your AFK message to `{message}`")
 
-                cursor.execute(f"UPDATE afk_users SET message=? WHERE user_id = ?", (message, ctx.author.id))
-                await ctx.reply(f"I've set your AFK message to `{message}`")
-
-                Database.userdata_conn.commit()
+            Database.userdata_conn.commit()
 
 
-                # Update the AFK users list
-                await SemiFunc.update_afk(self.bot.logger)
-            else:
-                await ctx.reply(f"Cannot set your AFK message because you've not used ?afk or /afk")
+            # Update the AFK users list
+            SemiFunc.update_afk(self.bot.logger)
+        else:
+            await ctx.reply(f"Cannot set your AFK message because you've not used ?afk or /afk")
 
     @commands.guild_only()
     @commands.hybrid_command(name="afktoggle")
@@ -193,40 +187,38 @@ class UserCommands__Misc__AFK(commands.Cog):
 
         await SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction, ctx)
         
-        async with Database.db_lock:
-            is_already_afk = False
+        is_already_afk = False
 
-            for user in SemiFunc.afk_users:
-                if user['user_id'] == ctx.author.id:
-                    is_already_afk = True
+        for user in SemiFunc.afk_users:
+            if user['user_id'] == ctx.author.id:
+                is_already_afk = True
 
-            if is_already_afk:
-                cursor = Database.userdata_conn.cursor()
-                toggle = cursor.execute(f"SELECT toggle FROM afk_users WHERE user_id = ?", (ctx.author.id,)).fetchone()[0]
+        if is_already_afk:
+            toggle = Database.userdata_conn.execute(f"SELECT toggle FROM afk_users WHERE user_id = ?", (ctx.author.id,)).fetchone()[0]
+            new_toggle = 1
+
+            msg = "I've toggled your afk status from being removed.. it cannot be removed now from chatting."
+
+            if toggle == 0:
+                new_toggle = 1
+                msg = "I've toggled your afk status from being removed.. it cannot be removed now from chatting."
+            elif toggle == 1:
+                new_toggle = 0
+                msg = "I've toggled your afk status from being removed.. it can now be removed now from chatting."
+            else:
+                msg = "I've toggled your afk status from being removed.. it cannot be removed now from chatting."
                 new_toggle = 1
 
-                msg = "I've toggled your afk status from being removed.. it cannot be removed now from chatting."
+            Database.userdata_conn.execute(f"UPDATE afk_users SET toggle=? WHERE user_id = ?", (new_toggle, ctx.author.id))
+            await ctx.reply(msg)
 
-                if toggle == 0:
-                    new_toggle = 1
-                    msg = "I've toggled your afk status from being removed.. it cannot be removed now from chatting."
-                elif toggle == 1:
-                    new_toggle = 0
-                    msg = "I've toggled your afk status from being removed.. it can now be removed now from chatting."
-                else:
-                    msg = "I've toggled your afk status from being removed.. it cannot be removed now from chatting."
-                    new_toggle = 1
-
-                cursor.execute(f"UPDATE afk_users SET toggle=? WHERE user_id = ?", (new_toggle, ctx.author.id))
-                await ctx.reply(msg)
-
-                Database.userdata_conn.commit()
+            Database.userdata_conn.commit()
 
 
-                # Update the AFK users list
-                await SemiFunc.update_afk(self.bot.logger)
-            else:
-                await ctx.reply(f"Cannot use afktoggle because you've not used ?afk or /afk")
+            # Update the AFK users list
+            SemiFunc.update_afk(self.bot.logger)
+        else:
+            await ctx.reply(f"Cannot use afktoggle because you've not used ?afk or /afk")
 
 async def setup(bot):
     await bot.add_cog(UserCommands__Misc__AFK(bot))

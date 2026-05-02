@@ -18,7 +18,6 @@ def update(bot_instance: Bot):
 
 # Shorter stuff, then big stuff
 
-@api.route("/api/botCredits", methods=["GET"])
 @api.route("/botCredits", methods=["GET"])
 def botCredits():
     
@@ -27,12 +26,10 @@ def botCredits():
         mimetype="application/json"
     )
 
-@api.route("/api/getJobs", methods=["GET"])
 @api.route("/getJobs", methods=["GET"])
 def getJobs():
     return jsonify( Database.get_jobs()['jobs'] )
 
-@api.route("/api/botStatus", methods=["GET"])
 @api.route("/botStatus", methods=["GET"])
 def botStatus():
     # If the web api is online, so is the bot.
@@ -44,7 +41,6 @@ def botStatus():
     return jsonify({"discord": {"status_provider": "discordstatus.com", "status": status}, "status": "online"})
 
 
-@api.route("/api/getCommands", methods=['GET'])
 @api.route("/getCommands", methods=['GET'])
 def getCommands():
     if bot:
@@ -74,7 +70,6 @@ def getCommands():
     return jsonify({"error": "Bot is inactive."})
 
 
-@api.route("/api/getLeaderboard", methods=['GET'])
 @api.route("/getLeaderboard", methods=['GET'])
 def getLeaderboard():
     leaderboard = []
@@ -98,7 +93,6 @@ def getLeaderboard():
 
     return jsonify(leaderboard)
 
-@api.route("/api/banishCheck", methods=["GET"])
 @api.route("/banishCheck", methods=["GET"])
 def banishCheck():
     sentence = request.args.get("sentence")
@@ -137,7 +131,6 @@ def banishCheck():
     
     return jsonify({"status": "good", "detected": "", "message": "That will not get banished or flagged."})
 
-@api.route("/api/getUsers", methods=["GET"])
 @api.route("/getUsers", methods=["GET"])
 def getUsers():
     user_data = Database.userdata_conn.execute(f"SELECT * FROM user_data").fetchall()

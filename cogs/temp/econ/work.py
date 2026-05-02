@@ -42,13 +42,12 @@ class Econ__Work(commands.Cog):
         Economy.use_econ(ctx, ctx.author, self.bot.logger)
 
         jobs_conn = Database.jobs_conn
-        cursor = jobs_conn.cursor()
         jobs = []
 
-        for job in cursor.execute("SELECT * FROM jobs").fetchall():
+        for job in Database.fetchall("jobs", "SELECT * FROM jobs"):
             jobs.append([job[1], job[2]])
 
-        user = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
+        user = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
         if len(user) > 0:
             job = user[3]
             for job_ in jobs:
@@ -66,7 +65,7 @@ class Econ__Work(commands.Cog):
                 wage = job[1] * hours
                 bal = user[4]
 
-                Database.userdata_conn.cursor().execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (bal + wage, ctx.author.id))
+                Database.userdata_conn.execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (bal + wage, ctx.author.id))
                 Database.userdata_conn.commit()
                 await ctx.reply(f"You went work for {job[0]} for {hours} hours, and earned {wage} {Economy.get_curreny_name()}!")
                 Economy.econ__put_on_cooldown(ctx, ctx.author, self.bot.logger)
@@ -98,17 +97,16 @@ class Econ__Work(commands.Cog):
             return
         
         jobs_conn = Database.jobs_conn
-        cursor = jobs_conn.cursor()
         jobs = []
 
-        for job in cursor.execute("SELECT * FROM jobs").fetchall():
+        for job in Database.fetchall("jobs", "SELECT * FROM jobs"):
             jobs.append(job[1])
 
-        user = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
+        user = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
         if len(user) > 0:
             # Make sure they have a job
             if user[3] in jobs:
-                Database.userdata_conn.cursor().execute(f'UPDATE user_data SET job=? WHERE user_id=?', ("NULL", ctx.author.id))
+                Database.userdata_conn.execute(f'UPDATE user_data SET job=? WHERE user_id=?', ("NULL", ctx.author.id))
                 Database.userdata_conn.commit()
 
                 await ctx.reply(f"Sad to see you leave {user[2]}. Thanks for working with and for us.")
@@ -143,14 +141,13 @@ class Econ__Work(commands.Cog):
         
 
         jobs_conn = Database.jobs_conn
-        cursor = jobs_conn.cursor()
         jobs = []
 
-        for job in cursor.execute("SELECT * FROM jobs").fetchall():
+        for job in Database.fetchall("jobs", "SELECT * FROM jobs"):
             # Put the job in lower case because fuckery.
             jobs.append(job[1])
 
-        user = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
+        user = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
         if len(user) > 0:
             # "SNOWY THIS IS UNREALISTIC! YOU CAN HAVE MANY JOBS!"
             # Yea I know that, laddie. you can't save a whole list to a database.
@@ -169,7 +166,7 @@ class Econ__Work(commands.Cog):
                         is_job = True
                 
                 if is_job:
-                    Database.userdata_conn.cursor().execute(f'UPDATE user_data SET job=? WHERE user_id=?', (job, ctx.author.id))
+                    Database.userdata_conn.execute(f'UPDATE user_data SET job=? WHERE user_id=?', (job, ctx.author.id))
                     Database.userdata_conn.commit()
 
                     await ctx.reply(f"You've applied to work for {giv_job.lower()}, and got hired! Welcome to the team!")
@@ -203,11 +200,7 @@ class Econ__Work(commands.Cog):
             return
         
         embed:discord.Embed = Economy.econ_embed(title="")
-        jobs_conn = Database.jobs_conn
-        cursor = jobs_conn.cursor()
-
-        cursor.execute("SELECT * FROM jobs")
-        jobs_data = cursor.fetchall()
+        jobs_data = Database.fetchall("jobs", "SELECT * FROM jobs")
 
         description = "# Currently Available Jobs\n-# Note: Someone can have the same job as another person."
         fields = []

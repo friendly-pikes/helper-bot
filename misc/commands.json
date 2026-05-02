@@ -43,6 +43,14 @@
 
         "What do you think should be added to the bot?"
     ],
+
+    "jokes": [
+        "Why did the scarecrow win an award? Because he was outstanding in his field!",
+        "What do you call a fake noodle? An impasta!",
+        "Why don't scientists trust atoms? Because they make up everything!",
+        "I'm on a seafood diet. I see food and I eat it.",
+        "Parallel lines have so much in common. It’s a shame they’ll never meet."
+    ],
     
     "staff": [
         "ban",

@@ -59,7 +59,7 @@ class Econ__AddMoney(commands.Cog):
             return
 
         not_in_db_msg = "They aren't in our user database, so we can't add to their balance at the moment."
-        user_data = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={user.id}").fetchone()
+        user_data = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={user.id}").fetchone()
         if user.id == ctx.author.id:
             not_in_db_msg = "You aren't in our user database, so we can't add to their balance at the moment."
 
@@ -70,7 +70,7 @@ class Econ__AddMoney(commands.Cog):
 
             new_bal = user_data[4] + amount
     
-            Database.userdata_conn.cursor().execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (new_bal, user.id))
+            Database.userdata_conn.execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (new_bal, user.id))
             Database.userdata_conn.commit()
             await ctx.reply(f"You've added {amount} {Economy.get_curreny_name()} to {user.mention}'s balance successfully!")
         else:
@@ -111,14 +111,14 @@ class Econ__AddMoney(commands.Cog):
             await ctx.reply("Bots can't use the economy system.")
             return
         
-        user_data = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
+        user_data = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
 
         if amount > user_data[4]:
             await ctx.reply(f"Can't remove more than what they have.. they have {Economy.format_amount(user_data[3])} {Economy.get_curreny_name()}.")
         else:
             new_bal = user_data[4] - amount
             
-            Database.userdata_conn.cursor().execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (new_bal, ctx.author.id))
+            Database.userdata_conn.execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (new_bal, ctx.author.id))
             Database.userdata_conn.commit()
 
             await ctx.reply(f"{ctx.author.mention} removed {amount} {Economy.get_curreny_name()} from the balance of {user.mention}")
@@ -160,9 +160,7 @@ class Econ__AddMoney(commands.Cog):
         
 
         if confirm.lower() in ["y", "yes"]:
-            # user_data = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
-
-            Database.userdata_conn.cursor().execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (0, user.id))
+            Database.userdata_conn.execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (0, user.id))
             Database.userdata_conn.commit()
 
             await ctx.reply(f"{ctx.author.mention} has reset {user.mention}'s data.")

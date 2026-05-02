@@ -26,7 +26,7 @@ class ManagerCommands__Misc__GenJoinMessage(commands.Cog):
         ctx: Context
             The context of the command invokation
         user: discord.Member
-            The users
+            The user to make a join image and message for
         """
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")

@@ -524,28 +524,39 @@ class CogStuff(commands.Cog):
 
             if gud:
                 for sub in os.listdir(f"cogs/{who}"):
-                    if sub != "__pycache__":
-                        if sub.endswith(".py"):
-                            commands = commands + 1
-                            name = sub[:-3]
-                            try:
-                                await self.bot.reload_extension(f"cogs.{who}.{name}")
-                                success.append(f"cogs.{who}.{name}")
-                            except Exception as e:
-                                failed.append(f"cogs.{who}.{name} - {e}")
+                    gud_test = True
+                    if sub == "test":
+                        if self.bot.user.id == 1482861019582693507:
+                            self.bot.logger.info("Load test commands.")
+                            gud_test = True
                         else:
-                            for file in os.listdir(f"cogs/{who}/{sub}"):
-                                # Ignore files that aren't .py files
-                                if not file.endswith(".py"):
-                                    continue
-                                
+                            self.bot.logger.info("Don't load test commands.")
+                            gud_test = False
+
+                        
+                    if gud_test == True:
+                        if sub != "__pycache__":
+                            if sub.endswith(".py"):
                                 commands = commands + 1
-                                name = file[:-3]
+                                name = sub[:-3]
                                 try:
-                                    await self.bot.reload_extension(f"cogs.{who}.{sub}.{name}")
-                                    success.append(f"cogs.{who}.{sub}.{name}")
+                                    await self.bot.reload_extension(f"cogs.{who}.{name}")
+                                    success.append(f"cogs.{who}.{name}")
                                 except Exception as e:
-                                    failed.append(f"cogs.{who}.{sub}.{name} - {e}")
+                                    failed.append(f"cogs.{who}.{name} - {e}")
+                            else:
+                                for file in os.listdir(f"cogs/{who}/{sub}"):
+                                    # Ignore files that aren't .py files
+                                    if not file.endswith(".py"):
+                                        continue
+                                    
+                                    commands = commands + 1
+                                    name = file[:-3]
+                                    try:
+                                        await self.bot.reload_extension(f"cogs.{who}.{sub}.{name}")
+                                        success.append(f"cogs.{who}.{sub}.{name}")
+                                    except Exception as e:
+                                        failed.append(f"cogs.{who}.{sub}.{name} - {e}")
 
 
         successA = ""

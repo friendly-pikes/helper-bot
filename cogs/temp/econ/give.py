@@ -43,8 +43,8 @@ class Econ__Give(commands.Cog):
             await ctx.reply("You can't do that you goober! You can't give yourself your own money!")
             return
 
-        user_data = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
-        user_togive_data = Database.userdata_conn.cursor().execute(f"SELECT * FROM user_data WHERE user_id={user.id}").fetchone()
+        user_data = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={ctx.author.id}").fetchone()
+        user_togive_data = Database.userdata_conn.execute(f"SELECT * FROM user_data WHERE user_id={user.id}").fetchone()
 
         if amount > user_data[4]:
             await ctx.reply(f"You can't give more than what you have! You have {Economy.format_amount(user_data[3])} {Economy.get_curreny_name()}.")
@@ -52,8 +52,8 @@ class Econ__Give(commands.Cog):
             new_bal = user_data[4] - amount
             new_bal_togive = user_togive_data[4] + amount
             
-            Database.userdata_conn.cursor().execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (new_bal, ctx.author.id))
-            Database.userdata_conn.cursor().execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (new_bal_togive, user.id))
+            Database.userdata_conn.execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (new_bal, ctx.author.id))
+            Database.userdata_conn.execute(f'UPDATE user_data SET tokens=? WHERE user_id=?', (new_bal_togive, user.id))
             Database.userdata_conn.commit()
 
             Economy.use_econ(ctx, ctx.author, self.bot.logger)

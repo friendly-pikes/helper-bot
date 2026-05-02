@@ -33,10 +33,7 @@ class Banished(commands.Cog):
             await ctx.reply("That command is owners only.")
             return
         
-        cursor = Database.banished_conn.cursor()
-
-        cursor.execute("SELECT * FROM banished_ids")
-        resultRaw = cursor.fetchall()
+        resultRaw = Database.fetchall("banished", "SELECT * FROM banished_ids")
         result = []
         
         for res in resultRaw:
@@ -46,7 +43,7 @@ class Banished(commands.Cog):
             await ctx.reply(f"The user id `{id}` is already in banished userids. It's a good idea not to have duplicates.", ephemeral=True)
         else:
             try:
-                cursor.execute(f"INSERT INTO banished_ids VALUES ({id})")
+                Database.banished_conn.execute(f"INSERT INTO banished_ids VALUES ({id})")
                 Database.banished_conn.commit()
                 await ctx.reply(f"Successfully added the user id {id} to banished user ids!", ephemeral=True)
             except Exception as e:
@@ -73,10 +70,7 @@ class Banished(commands.Cog):
             await ctx.reply("That command is owners only.")
             return
         
-        cursor = Database.banished_conn.cursor()
-
-        cursor.execute("SELECT * FROM banished_words_bypasses")
-        resultRaw = cursor.fetchall()
+        resultRaw = await Database.execute("banished", "SELECT * FROM banished_words_bypasses")
         result = []
         
         for res in resultRaw:
@@ -86,7 +80,7 @@ class Banished(commands.Cog):
             await ctx.reply(f"The word `{bypass}` is already in banished word bypasses. It's a good idea not to have duplicates.", ephemeral=True)
         else:
             try:
-                cursor.execute(f'INSERT INTO banished_words_bypasses VALUES ("{bypass}")')
+                Database.banished_conn.execute(f'INSERT INTO banished_words_bypasses VALUES ("{bypass}")')
                 Database.banished_conn.commit()
                 await ctx.reply(f"Successfully added `{bypass}` to banished word bypasses!", ephemeral=True)
             except Exception as e:
@@ -116,10 +110,7 @@ class Banished(commands.Cog):
                 await ctx.reply("That command is only usable by owners and managers.")
                 return
         
-        cursor = Database.banished_conn.cursor()
-
-        cursor.execute("SELECT * FROM banished_flagmsg")
-        resultRaw = cursor.fetchall()
+        resultRaw = await Database.execute("banished", "SELECT * FROM banished_flagmsg")
         result = []
         
         for res in resultRaw:
@@ -129,7 +120,7 @@ class Banished(commands.Cog):
             await ctx.reply(f"The word `{flag}` is already in banished word bypasses. It's a good idea not to have duplicates.", ephemeral=True)
         else:
             try:
-                cursor.execute(f'INSERT INTO banished_flagmsg VALUES ("{flag}")')
+                Database.banished_conn.execute(f'INSERT INTO banished_flagmsg VALUES ("{flag}")')
                 Database.banished_conn.commit()
                 await ctx.reply(f"Successfully added `{flag}` to banished word flags!", ephemeral=True)
             except Exception as e:
@@ -158,10 +149,7 @@ class Banished(commands.Cog):
             await ctx.reply("That command is owners only.")
             return
         
-        cursor = Database.banished_conn.cursor()
-
-        cursor.execute("SELECT * FROM banished_words_noignore")
-        resultRaw = cursor.fetchall()
+        resultRaw = await Database.fetchall("banished", "SELECT * FROM banished_words_noignore")
         result = []
         
         for res in resultRaw:
@@ -171,7 +159,7 @@ class Banished(commands.Cog):
             await ctx.reply(f"The word `{word}` is already in banished words for everyone. It's a good idea not to have duplicates.", ephemeral=True)
         else:
             try:
-                cursor.execute(f'INSERT INTO banished_words_noignore VALUES ("{word}", "{message}")')
+                Database.banished_conn.execute(f'INSERT INTO banished_words_noignore VALUES ("{word}", "{message}")')
                 Database.banished_conn.commit()
                 await ctx.reply(f"Successfully added `{word}` with the message `{message}` to banished words for everyone!", ephemeral=True)
             except Exception as e:
@@ -200,10 +188,7 @@ class Banished(commands.Cog):
             await ctx.reply("That command is owners only.")
             return
         
-        cursor = Database.banished_conn.cursor()
-
-        cursor.execute("SELECT * FROM banished_words")
-        resultRaw = cursor.fetchall()
+        resultRaw = await Database.execute("banished", "SELECT * FROM banished_words")
         result = []
         
         for res in resultRaw:
@@ -213,7 +198,7 @@ class Banished(commands.Cog):
             await ctx.reply(f"The word `{word}` is already in banished words. It's a good idea not to have duplicates.", ephemeral=True)
         else:
             try:
-                cursor.execute(f'INSERT INTO banished_words VALUES ("{word}", "{message}")')
+                Database.banished_conn.execute(f'INSERT INTO banished_words VALUES ("{word}", "{message}")')
                 Database.banished_conn.commit()
                 await ctx.reply(f"Successfully added `{word}` with the message `{message}` to banished words!", ephemeral=True)
             except Exception as e:

@@ -14,6 +14,7 @@ __pycache__
 # Other (ignored for user privacy and other)
 assets/join_message_images/*.*
 assets/profile_pictures/*.*
+assets/boost_images/*.*
 
 ## Snowy (Local ignore.)
 testing

@@ -1,5 +1,8 @@
+import json
+import random
 
 from utils.custom.context import Context
+from utils.files import files
 
 def main_or_test(id: int):
     if id == 1414222707570118656:
@@ -34,3 +37,12 @@ class SemiBot():
             errors.append("I cannot change your nickname.")
 
         return {"nick": nick, "errors": errors}
+
+
+    def get_joke():
+        with open(files.get_filepath("commands", "json"), "r", encoding="utf8") as file:
+            config = json.load(file)
+
+        selected_joke = random.choice(config['jokes'])
+        
+        return selected_joke

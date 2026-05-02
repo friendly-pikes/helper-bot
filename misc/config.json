@@ -1,5 +1,5 @@
 {
-    "bot_version": "2.2.7",
+    "bot_version": "2.2.8",
     "language": "python",
 
     "prefix": "?",
@@ -20,5 +20,10 @@
     "output_on_command_used_enabled":  true,
     "log_audits_enabled":              false,
     "join_message_enabled":            true,
-    "leave_message_enabled":           true
+    "leave_message_enabled":           true,
+
+
+    "owner_ids": [
+        888072934114074624
+    ]
 }

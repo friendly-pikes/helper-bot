@@ -44,7 +44,7 @@ def create_app():
 
     @app.route("/")
     def home():
-        return send_from_directory("", "index.html")
+        # return send_from_directory("", "index.html")
 
 
         # importlib.reload(misc_module)
@@ -53,37 +53,10 @@ def create_app():
         #     json.dumps(misc_module.INFO, indent=4),
         #     mimetype="application/json"
         # )
-    
-    @app.route("/api/*")
-    def api_help():
-        
         return Response(
             json.dumps(misc_module.INFO, indent=4),
             mimetype="application/json"
         )
-    
-    @app.route('/<path:path>')
-    def file(path: str):
-        if path.startswith("api"):
-            return Response(
-                json.dumps(misc_module.INFO, indent=4),
-                mimetype="application/json"
-            )
-        
-        return send_from_directory("", "index.html")
-        # if path.startswith(('__pycache__', '_old', 'hidden', 'routes', 'templates')):
-        #     return send_from_directory("hidden", "missing.html")
-
-
-        # if os.path.exists(f"web/{path}/index.html"):
-        #     return send_from_directory("", f"{path}/index.html")
-        # if os.path.exists(f"web/{path}"):
-        #     return send_from_directory("", path)
-        # if os.path.exists(f"web/{path}.html"):
-        #     return send_from_directory("", f"{path}.html")
-            
-        # return send_from_directory("hidden", "missing.html")
-
     
     # @app.errorhandler(404)
     # def notfound(error):

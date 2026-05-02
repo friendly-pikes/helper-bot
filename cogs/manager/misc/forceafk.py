@@ -77,13 +77,10 @@ class ManagerCommands__Misc__ForceAFK(commands.Cog):
         if is_already_afk:
             await ctx.reply("Cannot change their status to AFK because they've already used ?afk or /afk.")
         else:
-            cursor = Database.userdata_conn.cursor()
-            
             nick = usernick(ctx.guild, user)
             afkSince_createdat = ctx.message.created_at.strftime("%d/%m/%Y %H:%M")
 
-            cursor.execute(f'INSERT INTO afk_users VALUES ({user.id}, "{nick['nick']}", "{message}", "{afkSince_createdat}", 0)')
-
+            Database.userdata_conn.execute(f'INSERT INTO afk_users VALUES', (user.id, nick['nick'], message, afkSince_createdat, 0))
             Database.userdata_conn.commit()
 
             try:

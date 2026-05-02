@@ -66,6 +66,7 @@ class Staff(commands.Cog):
                     await ctx.reply(f"Bots cannot be banished, banned, muted or kicked.")
                 return
             
+            print(f"yo {ctx.message.content}")
             await SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction, ctx)
             
             errors = []
