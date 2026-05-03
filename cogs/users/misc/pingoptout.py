@@ -1,8 +1,11 @@
 ###############################################
 #
 # File: cogs.users.misc.pingoptout
-# Date: 30/04/2026
-# Author: chilly_dafur
+# Date: 30/04/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose: 
+#  
+# Author: snow2code
 #
 ###############################################
 
