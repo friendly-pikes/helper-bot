@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.users.misc.afk
+# Date: 06/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import sqlite3
 
 from utils.database import Database

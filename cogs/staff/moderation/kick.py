@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.staff.moderation.kick
+# Date: 06/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose: Command for kicking a user.
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import discord
 import asyncio
 

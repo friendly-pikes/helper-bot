@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.manager.misc.forceafk
+# Date: Around 28/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import discord
 
 from utils.database import Database

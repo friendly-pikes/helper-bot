@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.temp.test.ping
+# Date: Around 09/04/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import os
 import discord
 import requests

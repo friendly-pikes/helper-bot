@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.temp.econ_staff.money
+# Date: 15/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 # "Hi I like money" - Mr Crabs
 
 import enum

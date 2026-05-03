@@ -1,3 +1,15 @@
+###############################################
+#
+# File: listeners.audit_logs.reaction_logs
+# Date: 29/04/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import discord
 from discord.ext import commands
 from utils.discordbot import Bot

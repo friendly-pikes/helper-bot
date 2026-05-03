@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.staff.moderation.updatemute
+# Date: 06/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import discord
 
 from datetime import timedelta

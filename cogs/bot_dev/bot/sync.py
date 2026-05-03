@@ -1,3 +1,14 @@
+###############################################
+#
+# File: cogs.bot_dev.bot.sync
+# Date: Sometime in March or April of 2026.
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
 
 from discord.ext import commands
 from utils.custom.context import Context

@@ -1,3 +1,15 @@
+###############################################
+#
+# File: listeners.on__ready.status
+# Date: 08/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import random
 import asyncio
 import discord

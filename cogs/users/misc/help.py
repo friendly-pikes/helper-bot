@@ -1,3 +1,18 @@
+###############################################
+#
+# File: cogs.users.misc.help
+# Date: 20/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose: Replace the default help command
+#  with something custom.. removed for
+#  the help command being more complex than
+#  I thought.
+# 
+# Author: snow2code
+#
+###############################################
+
+
 # nah nvm fuck u
 
 import sqlite3

@@ -1,3 +1,15 @@
+#################################################
+#
+# File: listeners.on__conect.create_databases
+# Date: 09/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+#################################################
+
+
 from discord.ext import commands
 from utils.discordbot import Bot
 from utils.database import Database

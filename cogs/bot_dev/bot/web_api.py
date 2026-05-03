@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.bot_dev.misc.web_api
+# Date: 30/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import os
 
 from discord.ext import commands

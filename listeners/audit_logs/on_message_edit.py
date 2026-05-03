@@ -1,3 +1,15 @@
+#################################################
+#
+# File: listeners.audit_logs.on_message_edit
+# Date: 02/05/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+#################################################
+
+
 import discord
 
 from datetime import datetime

@@ -1,3 +1,16 @@
+###############################################
+#
+# File: cogs.bot_dev.misc.genboostimage
+# Date: 30/04/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose: Command for generating a boost message.
+#  Made for testing.
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import os
 import time
 import discord

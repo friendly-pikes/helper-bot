@@ -1,3 +1,15 @@
+###############################################
+#
+# File: listeners.audit_logs.message_delete
+# Date: 02/05/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import os
 import re
 import discord

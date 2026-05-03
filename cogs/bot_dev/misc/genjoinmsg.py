@@ -1,3 +1,16 @@
+###############################################
+#
+# File: cogs.bot_dev.misc.genjoinmsg
+# Date: Sometime in March 2026.. unsure
+# Date Edited: 03/05/2026 (EU)
+# Purpose: Command for generating a join message.
+#  Made for testing.
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import os
 import discord
 import requests

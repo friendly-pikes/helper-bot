@@ -1,3 +1,15 @@
+###################################################
+#
+# File: listeners.on__message.delete_bot_messages
+# Date: 08/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###################################################
+
+
 import discord
 import re
 

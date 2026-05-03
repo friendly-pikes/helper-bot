@@ -1,3 +1,15 @@
+###############################################
+#
+# File: listeners.verify.reaction
+# Date: 11/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 from discord import *
 from discord.ext import commands
 from utils.discordbot import Bot

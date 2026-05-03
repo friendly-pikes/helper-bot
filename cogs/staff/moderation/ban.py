@@ -1,3 +1,16 @@
+###############################################
+#
+# File: cogs.staff.moderation.ban
+# Date: 06/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose: Command for banning a user.
+#  Removed as per request in March 2026.
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import discord
 
 from datetime import datetime

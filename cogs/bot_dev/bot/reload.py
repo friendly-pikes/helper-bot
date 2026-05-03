@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.bot_dev.reload
+# Date: Sometime in March or April of 2026
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import os
 import discord
 import importlib

@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.manager.user.banished
+# Date: 10/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import sqlite3
 
 from discord.ext import commands

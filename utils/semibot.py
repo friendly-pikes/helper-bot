@@ -1,3 +1,15 @@
+###############################################
+#
+# File: utils.semibot
+# Date: 27/04/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import json
 import random
 

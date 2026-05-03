@@ -1,3 +1,15 @@
+###############################################
+#
+# File: utils.discordbot
+# Date: 01/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import os
 import json
 import random

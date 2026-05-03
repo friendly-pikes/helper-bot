@@ -1,3 +1,16 @@
+###############################################
+#
+# File: cogs.users.server.serverstats
+# Date: 05/03/2026 (EU)
+# Date Edited: 05/03/2026 (EU)
+# Purpose: Show how many users, bots
+#  and roles there is in the server.
+#  
+# Author: snow2code
+#
+###############################################
+
+
 
 from discord.ext import commands
 from utils.custom.context import Context

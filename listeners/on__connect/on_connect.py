@@ -1,3 +1,15 @@
+###############################################
+#
+# File: listeners.on__connect.on_connect
+# Date: 02/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import discord
 
 from discord.ext import commands

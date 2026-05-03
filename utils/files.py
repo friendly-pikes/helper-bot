@@ -1,3 +1,15 @@
+###############################################
+#
+# File: utils.files
+# Date: 03/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import json
 import os
 

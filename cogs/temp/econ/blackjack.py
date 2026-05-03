@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.temp.econ.
+# Date: 15/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 
 from discord.ext import commands
 from utils.custom.context import Context

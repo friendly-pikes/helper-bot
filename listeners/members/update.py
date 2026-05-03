@@ -1,3 +1,15 @@
+###############################################
+#
+# File: listeners.members.update
+# Date: 05/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import os
 import requests
 import discord

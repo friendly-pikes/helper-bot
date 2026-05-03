@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.bot_dev.bot.setstatus
+# Date: Sometime in March 2026
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import discord
 
 from discord.ext import commands

@@ -1,3 +1,16 @@
+###############################################
+#
+# File: cogs.temp.test.fakejoin
+# Date: Around 09/04/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose: Test join message. Add the DM
+#  message when they join.
+# 
+# Author: snow2code
+#
+###############################################
+
+
 import os
 import discord
 import requests

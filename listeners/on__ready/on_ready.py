@@ -1,3 +1,15 @@
+###############################################
+#
+# File: listeners.on__ready.on_ready
+# Date: 01/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 
 from discord.ext import commands
 from utils.discordbot import Bot

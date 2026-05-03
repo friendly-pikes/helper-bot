@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.staff.moderation.mute
+# Date: 06/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose: Command for muting a user.
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import re
 import discord
 

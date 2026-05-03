@@ -1,3 +1,15 @@
+###############################################
+#
+# File: listeners.on__message.boost_message
+# Date: 05/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import os
 import re
 import discord

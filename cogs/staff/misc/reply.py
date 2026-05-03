@@ -1,3 +1,17 @@
+###############################################
+#
+# File: cogs.staff.misc.reply
+# Date: 01/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose: Silly command for staff to interact
+#  in the server as the bot
+#   - Reply to a message
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import discord
 
 from discord.ext import commands

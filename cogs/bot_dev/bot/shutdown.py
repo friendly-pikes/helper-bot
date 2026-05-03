@@ -1,6 +1,14 @@
-import os
-import discord
-import importlib
+###############################################
+#
+# File: cogs.bot_dev.bot.shutdown
+# Date: 27/03/2026(?) (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
 
 from discord.ext import commands
 from utils.custom.context import Context

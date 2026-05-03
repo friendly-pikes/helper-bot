@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.users.misc.8ball
+# Date: 11/04/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import random
 import discord
 

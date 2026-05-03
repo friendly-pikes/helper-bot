@@ -1,3 +1,15 @@
+###############################################
+#
+# File: listeners.on__message.ping_everyone
+# Date: 21/02/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import re
 import discord
 

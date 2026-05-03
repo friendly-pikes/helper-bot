@@ -1,9 +1,17 @@
-import re
-import discord
-import asyncio
+###############################################
+#
+# File: cogs.manager.user.giverole
+# Date: 10/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
 
-import utils.files as files
-from datetime import datetime, timedelta
+
+import discord
+
 from discord.ext import commands
 from utils.custom.context import Context
 from utils.discordbot import Bot

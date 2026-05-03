@@ -1,3 +1,15 @@
+###############################################
+#
+# File: utils.semifunc
+# Date: 01/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import json
 import discord
 import random

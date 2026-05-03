@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.users.radar.bidar
+# Date: 02/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import discord
 
 from typing import Union

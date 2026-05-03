@@ -2,6 +2,12 @@
 
 #### A basic and rather silly bot made for The Fluffy Concourse
 
+Small note:
+A rework is in progress that makes the bot more customizable, and being able to be used in other servers possibly.
+...and allowing you guys to fork the code for features, bug fixes or optimizations in your own server
+
+### Made by snow2code
+
 ## Features
 - Mostly modulator!
 

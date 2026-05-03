@@ -1,3 +1,15 @@
+###################################################
+#
+# File: listeners.bot_reactions.random_messages
+# Date: 26/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###################################################
+
+
 import random
 import asyncio
 

@@ -1,3 +1,15 @@
+###############################################
+#
+# File: cogs.staff.moderation.banish
+# Date: 01/03/2026 (EU)
+# Date Edited: 03/05/2026 (EU)
+# Purpose:
+#  
+# Author: snow2code
+#
+###############################################
+
+
 import re
 import discord
 
